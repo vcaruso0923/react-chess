@@ -1,38 +1,121 @@
-.App {
+.board-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  background-color: #2196f3;
+  padding-left: 400px;
+  padding-right: 400px;
+}
+.board-square {
+  border: 1px solid gray;
+  padding: 20px;
+  font-size: 30px;
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  aspect-ratio: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.black-board-square {
   color: white;
+  background-color: brown;
 }
 
-.App-link {
-  color: #61dafb;
+.white-board-square {
+  color: black;
+  background-color: tan;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.white-board-square:hover {
+  /* border: 3px solid black; */
+  cursor: pointer;
+}
+
+.black-board-square:hover {
+  /* border: 3px solid white; */
+  cursor: pointer;
+}
+
+.square-code {
+  font-size: 10px;
+  align-self: baseline;
+}
+
+.empty-square {
+  height: 35px;
+  width: 35px;
+}
+
+.black-rook {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-rook.svg);
+}
+
+.black-horse {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-horse.svg);
+}
+
+.black-bishop {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-bishop.svg);
+}
+
+.black-queen {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-queen.svg);
+}
+
+.black-king {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-king.svg);
+}
+
+.black-pawn {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/black-pawn.svg);
+}
+
+.white-rook {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-rook.svg);
+}
+
+.white-horse {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-horse.svg);
+}
+
+.white-bishop {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-bishop.svg);
+}
+
+.white-queen {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-queen.svg);
+}
+
+.white-king {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-king.svg);
+}
+
+.white-pawn {
+  height: 35px;
+  width: 35px;
+  background-image: url(./imagePieces/white-pawn.svg);
+}
+
+.first-piece-selection {
+  background-color: green;
 }
