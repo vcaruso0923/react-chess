@@ -1,18 +1,28 @@
+import {
+  pieceToMoveNumber,
+  destinationNumber,
+  pieceToMoveCharacterCode,
+  destinationCharacterCode,
+  pieceToMoveCharacterLetter,
+  destinationCharacterLetter,
+} from './boardCodeVariables';
+
 export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
   if (piecesLocation[firstClick].includes('rook')) {
     // Can't move diagonal
     if (
-      parseInt(firstClick.slice(-1)) !== parseInt(secondClick.slice(-1)) &&
-      secondClick.charAt(0) !== firstClick.charAt(0)
+      pieceToMoveNumber(firstClick) !== destinationNumber(secondClick) &&
+      destinationCharacterLetter(secondClick) !==
+        pieceToMoveCharacterLetter(firstClick)
     ) {
       return false;
     }
     // Can't move over pieces horizontally
-    if (parseInt(firstClick.slice(-1)) === parseInt(secondClick.slice(-1))) {
+    if (pieceToMoveNumber(firstClick) === destinationNumber(secondClick)) {
       // moving left
       // prettier-ignore
-      if (secondClick.charCodeAt(0) < firstClick.charCodeAt(0)) {
-            for (let i = (secondClick.charCodeAt(0) + 1) ; i < firstClick.charCodeAt(0) ; i++) {
+      if (destinationCharacterCode(secondClick) < pieceToMoveCharacterCode(firstClick)) {
+            for (let i = (destinationCharacterCode(secondClick) + 1) ; i < pieceToMoveCharacterCode(firstClick) ; i++) {
                 let newCode = String.fromCharCode(i) + firstClick.slice(-1)
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
@@ -21,8 +31,8 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
         }
       // moving right
       // prettier-ignore
-      if (firstClick.charCodeAt(0) < secondClick.charCodeAt(0)) {
-          for (let i = (firstClick.charCodeAt(0) + 1) ; i < secondClick.charCodeAt(0) ; i++) {
+      if (pieceToMoveCharacterCode(firstClick) < destinationCharacterCode(secondClick)) {
+          for (let i = (pieceToMoveCharacterCode(firstClick) + 1) ; i < destinationCharacterCode(secondClick) ; i++) {
               let newCode = String.fromCharCode(i) + firstClick.slice(-1)
               if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                   return false
@@ -32,12 +42,15 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
     }
 
     // Can't move over pieces vertically
-    if (firstClick.charCodeAt(0) === secondClick.charCodeAt(0)) {
+    if (
+      pieceToMoveCharacterCode(firstClick) ===
+      destinationCharacterCode(secondClick)
+    ) {
       // moving down
       // prettier-ignore
-      if (parseInt(secondClick.slice(-1)) < parseInt(firstClick.slice(-1))) {
-              for (let i = (parseInt(secondClick.slice(-1)) + 1) ; i < parseInt(firstClick.slice(-1)) ; i++) {
-                  let newCode = firstClick.charAt(0) + i.toString()
+      if (destinationNumber(secondClick) < pieceToMoveNumber(firstClick)) {
+              for (let i = (destinationNumber(secondClick) + 1) ; i < pieceToMoveNumber(firstClick) ; i++) {
+                  let newCode = pieceToMoveCharacterLetter(firstClick) + i.toString()
                   if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                       return false
                   }
@@ -45,9 +58,9 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
           }
       // moving up
       // prettier-ignore
-      if (parseInt(firstClick.slice(-1)) < parseInt(secondClick.slice(-1))) {
-              for (let i = (parseInt(firstClick.slice(-1)) + 1) ; i < parseInt(secondClick.slice(-1)) ; i++) {
-                  let newCode = firstClick.charAt(0) + i.toString()
+      if (pieceToMoveNumber(firstClick) < destinationNumber(secondClick)) {
+              for (let i = (pieceToMoveNumber(firstClick) + 1) ; i < destinationNumber(secondClick) ; i++) {
+                  let newCode = pieceToMoveCharacterLetter(firstClick) + i.toString()
                   if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                       return false
                   }
