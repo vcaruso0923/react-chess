@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
-import { evaluateSecondClick } from '../utils/gameLogic';
+import { pieceMoveAttempt } from '../utils/gameLogic';
 
 function Gameboard() {
     const [firstClick, setFirstClick] = useState('');
@@ -25,7 +25,7 @@ function Gameboard() {
 
     const boardClickHandler = (e) => {
         e.preventDefault();
-        if (evaluateSecondClick(firstClick, e.target.value, piecesLocation)) {
+        if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
             let firstClickInitialClass = piecesLocation[firstClick];
             let newLocations = {

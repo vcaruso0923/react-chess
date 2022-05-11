@@ -8,11 +8,7 @@ import {
     rookMoveEval,
 } from './piecesLogic';
 
-export const evaluateSecondClick = (
-    firstClick,
-    secondClick,
-    piecesLocation
-) => {
+export const pieceMoveAttempt = (firstClick, secondClick, piecesLocation) => {
     // prettier-ignore
     return (
     firstClick !== '' &&
