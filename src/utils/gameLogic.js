@@ -25,3 +25,11 @@ export const pieceMoveAttempt = (firstClick, secondClick, piecesLocation) => {
 
   );
 };
+
+export const isKingAliveEval = (piecesLocation) => {
+    if (!Object.values(piecesLocation).includes('white-king')) {
+        return 'blackWin';
+    } else if (!Object.values(piecesLocation).includes('black-king')) {
+        return 'whiteWin';
+    }
+};

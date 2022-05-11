@@ -11,7 +11,7 @@ body {
     margin: 0px;
 }
 
-/* .board-container {
+.board-container {
     position: absolute;
     top: 0px;
     bottom: 0px;
@@ -19,34 +19,48 @@ body {
     right: 0px;
     display: flex;
     align-items: center;
+    justify-content: center;
     height: 100%;
     width: 100%;
     background-color: white;
-} */
+}
 
 .player-1-container {
     height: 50%;
     width: 25%;
-    justify-self: flex-start;
+    display: flex;
+    justify-content: center;
+    /* justify-self: flex-start; */
 }
 
 .player-2-containter {
     height: 50%;
     width: 25%;
-    justify-self: flex-end;
+    display: flex;
+    justify-content: center;
+    /* justify-self: flex-end; */
+}
+
+.player-container h2 {
+    padding: 5px;
+    margin: 5px;
+}
+
+.active-player {
+    color: green;
+    text-decoration: underline;
 }
 
 .chess-board {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    background-color: #2196f3;
-    height: 400px;
-    width: 400px;
+    /* height: 400px;
+    width: 400px; */
     align-self: center;
     justify-self: center;
 }
 .board-square {
-    border: 1px solid gray;
+    border: 2px solid gray;
     padding: 25px;
     margin: 0;
     text-align: center;
@@ -73,12 +87,12 @@ body {
 }
 
 .white-board-square:hover {
-    /* border: 3px solid black; */
+    border: 2px solid black;
     cursor: pointer;
 }
 
 .black-board-square:hover {
-    /* border: 3px solid white; */
+    border: 2px solid black;
     cursor: pointer;
 }
 
