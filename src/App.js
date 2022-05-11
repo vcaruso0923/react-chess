@@ -5,9 +5,8 @@ import Gameboard from './Gameboard';
 function App() {
     return (
         <div className="App">
-            <header className="App-header">
-                <Gameboard></Gameboard>
-            </header>
+            <header className="App-header"></header>
+            <Gameboard></Gameboard>
         </div>
     );
 }

@@ -5,7 +5,7 @@ import {
     destinationCharacterCode,
     pieceToMoveCharacterLetter,
     destinationCharacterLetter,
-} from './boardCodeVariables';
+} from '../boardCodeVariables';
 
 export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
     if (piecesLocation[firstClick].includes('rook')) {
@@ -68,15 +68,6 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
           }
         }
 
-        // Can't take friendly pieces
-        if (
-            (piecesLocation[firstClick].includes('white') &&
-                piecesLocation[secondClick].includes('white')) ||
-            (piecesLocation[firstClick].includes('black') &&
-                piecesLocation[secondClick].includes('black'))
-        ) {
-            return false;
-        }
         // All evaluated
         return true;
     } else {

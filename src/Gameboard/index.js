@@ -60,16 +60,24 @@ function Gameboard() {
 
     return (
         <div className="board-container">
-            {board.map((row) =>
-                row.map((item) => (
-                    <button
-                        onClick={boardClickHandler}
-                        className={boardSquareClasses(item)}
-                        value={item}
-                        id={item}
-                    ></button>
-                ))
-            )}
+            {/* <div className="player-1-container">
+                <h2>Player 1</h2>
+            </div> */}
+            <div className="chess-board">
+                {board.map((row) =>
+                    row.map((item) => (
+                        <button
+                            onClick={boardClickHandler}
+                            className={boardSquareClasses(item)}
+                            value={item}
+                            id={item}
+                        ></button>
+                    ))
+                )}
+            </div>
+            {/* <div className="player-2-containter">
+                <h2>Player 2</h2>
+            </div> */}
         </div>
     );
 }
