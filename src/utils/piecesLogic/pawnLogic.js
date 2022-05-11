@@ -87,18 +87,15 @@ export const pawnMoveEval = (firstClick, secondClick, piecesLocation) => {
             }
 
             // Can't go through pieces
+            // prettier-ignore
             if (
-                (destinationNumber(secondClick) -
-                    pieceToMoveNumber(firstClick) >
-                    1 &&
-                    piecesLocation[
-                        pieceToMoveCharacterLetter(firstClick) +
-                            (Number(firstClick.slice(-1)) + 1)
-                    ].includes('white')) ||
-                piecesLocation[
-                    pieceToMoveCharacterLetter(firstClick) +
-                        (Number(firstClick.slice(-1)) + 1)
-                ].includes('black')
+                (Math.abs(destinationNumber(secondClick) - pieceToMoveNumber(firstClick)) > 1 &&
+                (piecesLocation[firstClick].includes('white') &&
+                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('white')) ||
+                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('black')) || 
+                (piecesLocation[firstClick].includes('black') &&
+                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('white') ||
+                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('black'))
             ) {
                 return false;
             }

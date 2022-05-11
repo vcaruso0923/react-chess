@@ -100,7 +100,7 @@ function Gameboard() {
         <div className="board-container">
             <div className="player-1-container player-container">
                 <h2 className={playerTurn === 'white' ? 'active-player' : ''}>
-                    Player 1
+                    Player One{playerTurn === 'white' ? "'s Turn" : ''}
                 </h2>
                 <div className="defeated-pieces">
                     {defeatedBlackPieces !== []
@@ -124,7 +124,7 @@ function Gameboard() {
             </div>
             <div className="player-2-containter player-container">
                 <h2 className={playerTurn === 'black' ? 'active-player' : ''}>
-                    Player 2
+                    Player Two{playerTurn === 'black' ? "'s Turn" : ''}
                 </h2>
                 <div className="defeated-pieces">
                     {defeatedWhitePieces !== []
