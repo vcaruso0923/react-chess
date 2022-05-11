@@ -1,121 +1,121 @@
 .board-container {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  background-color: #2196f3;
-  padding-left: 400px;
-  padding-right: 400px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    background-color: #2196f3;
+    padding-left: 400px;
+    padding-right: 400px;
 }
 .board-square {
-  border: 1px solid gray;
-  padding: 20px;
-  font-size: 30px;
-  text-align: center;
-  aspect-ratio: 1;
-  display: flex;
+    border: 1px solid gray;
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+    aspect-ratio: 1;
+    display: flex;
 }
 
 .black-board-square {
-  color: white;
-  background-color: brown;
+    color: white;
+    background-color: brown;
 }
 
 .white-board-square {
-  color: black;
-  background-color: tan;
+    color: black;
+    background-color: tan;
 }
 
 .white-board-square:hover {
-  /* border: 3px solid black; */
-  cursor: pointer;
+    /* border: 3px solid black; */
+    cursor: pointer;
 }
 
 .black-board-square:hover {
-  /* border: 3px solid white; */
-  cursor: pointer;
+    /* border: 3px solid white; */
+    cursor: pointer;
 }
 
 .square-code {
-  font-size: 10px;
-  align-self: baseline;
+    font-size: 10px;
+    align-self: baseline;
 }
 
 .empty-square {
-  height: 35px;
-  width: 35px;
+    height: 35px;
+    width: 35px;
 }
 
 .black-rook {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-rook.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-rook.svg);
 }
 
 .black-horse {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-horse.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-horse.svg);
 }
 
 .black-bishop {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-bishop.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-bishop.svg);
 }
 
 .black-queen {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-queen.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-queen.svg);
 }
 
 .black-king {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-king.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-king.svg);
 }
 
 .black-pawn {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/black-pawn.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/black-pawn.svg);
 }
 
 .white-rook {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-rook.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-rook.svg);
 }
 
 .white-horse {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-horse.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-horse.svg);
 }
 
 .white-bishop {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-bishop.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-bishop.svg);
 }
 
 .white-queen {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-queen.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-queen.svg);
 }
 
 .white-king {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-king.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-king.svg);
 }
 
 .white-pawn {
-  height: 35px;
-  width: 35px;
-  background-image: url(./imagePieces/white-pawn.svg);
+    height: 35px;
+    width: 35px;
+    background-image: url(./imagePieces/white-pawn.svg);
 }
 
 .first-piece-selection {
-  background-color: green;
+    background-color: green;
 }
