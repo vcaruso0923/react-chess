@@ -7,6 +7,8 @@ function Gameboard() {
     const [secondClick, setSecondClick] = useState('');
     const [piecesLocation, setPiecesLocation] = useState(initialPiecesLocation);
     const [playerTurn, setPlayerTurn] = useState('white');
+    const [defeatedWhitePieces, setDefeatedWhitePieces] = useState([]);
+    const [defeatedBlackPieces, setDefeatedBlackPieces] = useState([]);
 
     const boardSquareClasses = (item) => {
         let classesString = 'board-square ';
@@ -30,6 +32,19 @@ function Gameboard() {
         // Valid second click:
         if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
+
+            // Add defeated pieces to appropriate defeated piece arrays
+            if (piecesLocation[e.target.value].includes('white')) {
+                setDefeatedWhitePieces((defeatedWhitePieces) => [
+                    ...defeatedWhitePieces,
+                    piecesLocation[e.target.value],
+                ]);
+            } else if (piecesLocation[e.target.value].includes('black')) {
+                setDefeatedBlackPieces((defeatedBlackPieces) => [
+                    ...defeatedBlackPieces,
+                    piecesLocation[e.target.value],
+                ]);
+            }
 
             // Empty pieces origin square and move it to destination
             let firstClickInitialClass = piecesLocation[firstClick];
@@ -87,6 +102,13 @@ function Gameboard() {
                 <h2 className={playerTurn === 'white' ? 'active-player' : ''}>
                     Player 1
                 </h2>
+                <div className="defeated-pieces">
+                    {defeatedBlackPieces !== []
+                        ? defeatedBlackPieces.map((piece) => (
+                              <div className={piece}> </div>
+                          ))
+                        : ''}
+                </div>
             </div>
             <div className="chess-board">
                 {board.map((row) =>
@@ -104,6 +126,13 @@ function Gameboard() {
                 <h2 className={playerTurn === 'black' ? 'active-player' : ''}>
                     Player 2
                 </h2>
+                <div className="defeated-pieces">
+                    {defeatedWhitePieces !== []
+                        ? defeatedWhitePieces.map((piece) => (
+                              <div className={piece}> </div>
+                          ))
+                        : ''}
+                </div>
             </div>
         </div>
     );

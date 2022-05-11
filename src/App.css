@@ -25,25 +25,34 @@ body {
     background-color: white;
 }
 
-.player-1-container {
+.player-container {
+    background-color: lightgrey;
     height: 50%;
     width: 25%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-content: center;
+}
+
+.player-1-container {
+    margin-right: 10px;
     /* justify-self: flex-start; */
 }
 
 .player-2-containter {
-    height: 50%;
-    width: 25%;
-    display: flex;
-    justify-content: center;
+    margin-left: 10px;
     /* justify-self: flex-end; */
 }
 
 .player-container h2 {
+    justify-self: flex-start;
     padding: 5px;
     margin: 5px;
+}
+
+.defeated-pieces {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
 }
 
 .active-player {
