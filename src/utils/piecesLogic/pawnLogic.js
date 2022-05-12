@@ -88,17 +88,18 @@ export const pawnMoveEval = (firstClick, secondClick, piecesLocation) => {
 
             // Can't go through pieces
             // prettier-ignore
-            if (
-                (Math.abs(destinationNumber(secondClick) - pieceToMoveNumber(firstClick)) > 1 &&
-                (piecesLocation[firstClick].includes('white') &&
-                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('white')) ||
-                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('black')) || 
-                (piecesLocation[firstClick].includes('black') &&
-                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('white') ||
-                piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('black'))
-            ) {
-                return false;
-            }
+            // if (
+            //     (Math.abs(destinationNumber(secondClick) - pieceToMoveNumber(firstClick)) > 1 &&
+            //     (piecesLocation[firstClick].includes('white') &&
+            //     piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('white')) ||
+            //     piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) + 1)].includes('black')) ||
+            //     (piecesLocation[firstClick].includes('black') &&
+            //     piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('white') ||
+            //     piecesLocation[pieceToMoveCharacterLetter(firstClick) + (Number(firstClick.slice(-1)) - 1)].includes('black'))
+            // ) {
+            //     return false;
+            // }
+
             // All evaluated
             return true;
             // Black pawn moving restrictions

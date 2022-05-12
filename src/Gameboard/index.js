@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
-import { pieceMoveAttempt, isKingAliveEval } from '../utils/gameLogic';
+import { pieceMoveAttempt } from '../utils/gameLogic';
 
 function Gameboard() {
     const [firstClick, setFirstClick] = useState('');
@@ -48,6 +48,21 @@ function Gameboard() {
 
             // Empty pieces origin square and move it to destination
             let firstClickInitialClass = piecesLocation[firstClick];
+            // Pawn to queen for black
+            if (
+                piecesLocation[firstClick].includes('pawn') &&
+                parseInt(e.target.value.slice(-1)) === 1
+            ) {
+                firstClickInitialClass = 'black-queen';
+            }
+            // Pawn to queen for white
+            if (
+                piecesLocation[firstClick].includes('pawn') &&
+                parseInt(e.target.value.slice(-1)) === 8
+            ) {
+                firstClickInitialClass = 'black-queen';
+            }
+
             let newLocations = {
                 [firstClick]: 'empty-square',
                 [e.target.value]: firstClickInitialClass,
