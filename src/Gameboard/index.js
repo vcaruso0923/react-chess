@@ -60,7 +60,7 @@ function Gameboard() {
                 piecesLocation[firstClick].includes('pawn') &&
                 parseInt(e.target.value.slice(-1)) === 8
             ) {
-                firstClickInitialClass = 'black-queen';
+                firstClickInitialClass = 'white-queen';
             }
 
             let newLocations = {
@@ -88,10 +88,14 @@ function Gameboard() {
                 alert('Black Wins! Resetting game...');
                 setPiecesLocation(initialPiecesLocation);
                 setPlayerTurn('white');
+                setDefeatedBlackPieces([]);
+                setDefeatedWhitePieces([]);
             } else if (piecesLocation[e.target.value] === 'black-king') {
                 alert('White Wins! Resetting game...');
                 setPiecesLocation(initialPiecesLocation);
                 setPlayerTurn('white');
+                setDefeatedBlackPieces([]);
+                setDefeatedWhitePieces([]);
             }
         } else {
             if (
