@@ -22,12 +22,10 @@ for (let i = 0; i < 100; i++) {
     games[i] = { players: 0, pid: [0, 0] };
 }
 
-const root = require('path').join(__dirname, '..', 'client', 'build');
-
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 app.get('*', (req, res) => {
-    res.sendFile('index.html', { root });
+    res.sendFile('../client/build/index.html', { root });
 });
 
 app.listen(port, () => {
