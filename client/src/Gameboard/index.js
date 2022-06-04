@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
 import { pieceMoveAttempt } from '../utils/gameLogic';
+import { io } from 'socket.io-client';
+
+const socket = io();
 
 function Gameboard() {
     const [firstClick, setFirstClick] = useState('');

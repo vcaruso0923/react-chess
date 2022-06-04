@@ -19,15 +19,25 @@ let players;
 // create an array of 100 games and initialize them
 const games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = { players: 0, pid: [0, 0] };
+    games[i] = { players: 0, playerId: [0, 0] };
 }
+const root = path.join(__dirname, '../', 'client', 'build');
 
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(root));
 
 app.get('*', (req, res) => {
-    res.sendFile('../client/build/index.html', { root });
+    res.sendFile('index.html', { root });
 });
 
-app.listen(port, () => {
+io.on('connection', function (socket) {
+    var color;
+    var playerId = Math.floor(Math.random() * 100 + 1);
+
+    console.log(playerId + ' connected');
+
+    socket.on('joined', function () {});
+});
+
+server.listen(port, () => {
     console.log(`Server listening on ${port}`);
 });
