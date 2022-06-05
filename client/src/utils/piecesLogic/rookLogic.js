@@ -5,7 +5,7 @@ import {
     destinationCharacterCode,
     pieceToMoveCharacterLetter,
     destinationCharacterLetter,
-} from '../boardCodeVariables';
+} from '../pieceLocationHelpers';
 
 export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
     if (piecesLocation[firstClick].includes('rook')) {

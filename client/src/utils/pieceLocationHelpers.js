@@ -1,3 +1,7 @@
+// Piece locations are defined by a combination of letter and numbers, for example a1.
+// These functions are used to get information about the piece location.
+// I could have used an array for piece locations, for example ['a', '1'] but it's too late to go back.
+
 export const pieceToMoveNumber = (firstClick) => {
     return parseInt(firstClick.slice(-1));
 };
