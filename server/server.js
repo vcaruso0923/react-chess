@@ -19,7 +19,7 @@ let players;
 // create an array of 100 games and initialize them
 const games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = { players: 0, playerNumber: [0, 0] };
+    games[i] = { players: 0, playerNumber: ['', ''] };
 }
 const root = path.join(__dirname, '../', 'client', 'build');
 
@@ -31,7 +31,7 @@ app.get('*', (req, res) => {
 
 io.on('connection', function (socket) {
     var color;
-    var playerId = Math.floor(Math.random() * 100 + 1);
+    var playerId = socket.id;
 
     console.log(playerId + ' connected');
 
@@ -39,8 +39,8 @@ io.on('connection', function (socket) {
         // when user attempts to join, see if there is space in the room
         // both slots available
         if (
-            games[roomId].playerNumber[0] === 0 &&
-            games[roomId].playerNumber[1] === 0
+            games[roomId].playerNumber[0] === '' &&
+            games[roomId].playerNumber[1] === ''
         ) {
             games[roomId].playerNumber[0] = playerId;
             color = 'white';
@@ -51,8 +51,8 @@ io.on('connection', function (socket) {
             });
             // first slot available
         } else if (
-            games[roomId].playerNumber[0] === 0 &&
-            games[roomId].playerNumber[1] !== 0
+            games[roomId].playerNumber[0] === '' &&
+            games[roomId].playerNumber[1] !== ''
         ) {
             games[roomId].playerNumber[0] = playerId;
             color = 'white';
@@ -63,8 +63,8 @@ io.on('connection', function (socket) {
             });
             // second slot available
         } else if (
-            games[roomId].playerNumber[0] !== 0 &&
-            games[roomId].playerNumber[1] === 0
+            games[roomId].playerNumber[0] !== '' &&
+            games[roomId].playerNumber[1] === ''
         ) {
             games[roomId].playerNumber[1] = playerId;
             color = 'black';
@@ -75,14 +75,31 @@ io.on('connection', function (socket) {
             });
             // neither slot available
         } else if (
-            games[roomId].playerNumber[0] !== 0 &&
-            games[roomId].playerNumber[1] !== 0
+            games[roomId].playerNumber[0] !== '' &&
+            games[roomId].playerNumber[1] !== ''
         ) {
             socket.emit('joinFailure', {
                 roomId,
                 playerId,
             });
         }
+
+        // Send the board data to opponent on a successful move event
+        socket.on('successfulMove', function (data) {
+            let piecesLocationFromOpponent = data.piecesLocationToSend;
+            let defeatedBlackPiecesFromOpponent =
+                data.defeatedBlackPiecesToSend;
+            let defeatedWhitePiecesFromOpponent =
+                data.defeatedWhitePiecesToSend;
+            let playerTurnFromOpponent = data.playerTurnToSend;
+
+            io.emit('opponentMoved', {
+                piecesLocationFromOpponent,
+                defeatedBlackPiecesFromOpponent,
+                defeatedWhitePiecesFromOpponent,
+                playerTurnFromOpponent,
+            });
+        });
     });
 });
 

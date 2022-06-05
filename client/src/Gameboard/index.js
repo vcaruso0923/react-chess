@@ -14,6 +14,17 @@ function Gameboard() {
     const [defeatedBlackPieces, setDefeatedBlackPieces] = useState([]);
     const [joinedRoom, setJoinedRoom] = useState('');
     const [playerColor, setPlayerColor] = useState('');
+    const [myTurn, setMyTurn] = useState(false);
+
+    socket.on('opponentMoved', (data) => {
+        if (!myTurn) {
+            setPiecesLocation(data.piecesLocationFromOpponent);
+            setDefeatedBlackPieces(data.defeatedBlackPiecesFromOpponent);
+            setDefeatedWhitePieces(data.defeatedWhitePiecesFromOpponent);
+            setPlayerTurn(data.playerTurnFromOpponent);
+        }
+        setMyTurn(true);
+    });
 
     const roomSubmitHandler = (e) => {
         e.preventDefault();
@@ -25,9 +36,11 @@ function Gameboard() {
 
         // if successful, set the roomID and playerColor - otherwise show some error
         socket.on('joinSuccess', function (data) {
-            console.log(data);
-            setPlayerColor(data.playerColor);
+            setPlayerColor(data.color);
             setJoinedRoom(data.roomId);
+            if (data.color === 'white') {
+                setMyTurn(true);
+            }
         });
 
         socket.on('joinFailure', function (data) {
@@ -53,6 +66,15 @@ function Gameboard() {
 
     const boardClickHandler = (e) => {
         e.preventDefault();
+        // variables to send to socket (can't wait for state update)
+        let piecesLocationToSend;
+        let defeatedBlackPiecesToSend = defeatedBlackPieces
+            ? defeatedBlackPieces
+            : [];
+        let defeatedWhitePiecesToSend = defeatedWhitePieces
+            ? defeatedWhitePieces
+            : [];
+        let playerTurnToSend = '';
 
         // Valid second click:
         if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
@@ -60,11 +82,15 @@ function Gameboard() {
 
             // Add defeated pieces to appropriate defeated piece arrays
             if (piecesLocation[e.target.value].includes('white')) {
+                defeatedWhitePiecesToSend.push(piecesLocation[e.target.value]);
+                defeatedBlackPiecesToSend = defeatedBlackPieces;
                 setDefeatedWhitePieces((defeatedWhitePieces) => [
                     ...defeatedWhitePieces,
                     piecesLocation[e.target.value],
                 ]);
             } else if (piecesLocation[e.target.value].includes('black')) {
+                defeatedBlackPiecesToSend.push(piecesLocation[e.target.value]);
+                defeatedWhitePiecesToSend = defeatedWhitePieces;
                 setDefeatedBlackPieces((defeatedBlackPieces) => [
                     ...defeatedBlackPieces,
                     piecesLocation[e.target.value],
@@ -92,6 +118,12 @@ function Gameboard() {
                 [firstClick]: 'empty-square',
                 [e.target.value]: firstClickInitialClass,
             };
+
+            piecesLocationToSend = {
+                ...piecesLocation,
+                ...newLocations,
+            };
+
             setPiecesLocation({
                 ...piecesLocation,
                 ...newLocations,
@@ -103,9 +135,21 @@ function Gameboard() {
             // Switch turns
             setFirstClick('');
             if (playerTurn === 'white') {
+                playerTurnToSend = 'black';
                 setPlayerTurn('black');
             } else {
+                playerTurnToSend = 'white';
                 setPlayerTurn('white');
+            }
+
+            if (myTurn) {
+                socket.emit('successfulMove', {
+                    piecesLocationToSend,
+                    defeatedBlackPiecesToSend,
+                    defeatedWhitePiecesToSend,
+                    playerTurnToSend,
+                });
+                setMyTurn(false);
             }
 
             // Check for winner
@@ -122,10 +166,12 @@ function Gameboard() {
                 setDefeatedBlackPieces([]);
                 setDefeatedWhitePieces([]);
             }
+            //add socket.emit for game win
         } else {
             if (
                 firstClick === '' &&
-                piecesLocation[e.target.value].includes(playerTurn)
+                piecesLocation[e.target.value].includes(playerTurn) &&
+                playerColor === playerTurn
             ) {
                 document
                     .getElementById(e.target.value)
@@ -161,7 +207,7 @@ function Gameboard() {
                             Player One{playerTurn === 'white' ? "'s Turn" : ''}
                         </h2>
                         <div className="defeated-pieces">
-                            {defeatedBlackPieces !== []
+                            {defeatedBlackPieces !== [] && defeatedBlackPieces
                                 ? defeatedBlackPieces.map((piece) => (
                                       <div className={piece}> </div>
                                   ))
@@ -189,7 +235,7 @@ function Gameboard() {
                             Player Two{playerTurn === 'black' ? "'s Turn" : ''}
                         </h2>
                         <div className="defeated-pieces">
-                            {defeatedWhitePieces !== []
+                            {defeatedWhitePieces !== [] && defeatedWhitePieces
                                 ? defeatedWhitePieces.map((piece) => (
                                       <div className={piece}> </div>
                                   ))
