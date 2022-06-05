@@ -187,15 +187,34 @@ function Gameboard() {
     };
 
     return (
-        <div className="app-container">
+        <div className="board-container">
             {joinedRoom === '' ? (
-                <div className="form-container">
-                    <form>
-                        <p>Enter which room to join (1-99)</p>
-                        <input type="number" id="room-join-input"></input>
-                        <button onClick={roomSubmitHandler}>Enter Room</button>
-                    </form>
-                </div>
+                <form className="form-container">
+                    <h2>Enter your name</h2>
+                    <div className="break"></div>
+                    <input
+                        type="text"
+                        id="name-input"
+                        className="form-input"
+                        placeholder="Your Name..."
+                    ></input>
+                    <div className="break"></div>
+                    <h2>Enter a room to join</h2>
+                    <div className="break"></div>
+                    <input
+                        type="number"
+                        id="room-join-input"
+                        className="form-input"
+                        placeholder="0-99..."
+                    ></input>
+                    <div className="break"></div>
+                    <button
+                        className="form-submit-button"
+                        onClick={roomSubmitHandler}
+                    >
+                        Enter Room
+                    </button>
+                </form>
             ) : (
                 <div className="board-container">
                     <div className="player-1-container player-container">

@@ -1,14 +1,65 @@
+:root {
+    --one-color: #fcffe7;
+    --two-color: #e0d8b0;
+    --three-color: #dea057;
+    --four-color: #ce9461;
+}
+
 html,
 body {
     height: 100%;
     width: 100%;
     margin: 0px;
+    background-color: var(--one-color);
 }
 
 .App {
     height: 100%;
     width: 100%;
     margin: 0px;
+    background-color: var(--one-color);
+}
+
+.form-container {
+    height: 50%;
+    width: 25%;
+    background-color: var(--two-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    border-radius: 6px;
+}
+
+.form-input {
+    width: 80%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-submit-button {
+    background-color: var(--three-color);
+    border: none;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.form-submit-button:hover {
+    background-color: var(--four-color);
+    cursor: pointer;
+}
+
+.break {
+    width: 100%;
+    height: 0;
 }
 
 .board-container {
