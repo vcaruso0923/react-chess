@@ -19,7 +19,7 @@ let players;
 // create an array of 100 games and initialize them
 const games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = { players: 0, playerId: [0, 0] };
+    games[i] = { players: 0, playerNumber: [0, 0] };
 }
 const root = path.join(__dirname, '../', 'client', 'build');
 
@@ -35,7 +35,55 @@ io.on('connection', function (socket) {
 
     console.log(playerId + ' connected');
 
-    socket.on('joined', function () {});
+    socket.on('joinAttempt', function (roomId) {
+        // when user attempts to join, see if there is space in the room
+        // both slots available
+        if (
+            games[roomId].playerNumber[0] === 0 &&
+            games[roomId].playerNumber[1] === 0
+        ) {
+            games[roomId].playerNumber[0] = playerId;
+            color = 'white';
+            socket.emit('joinSuccess', {
+                playerId,
+                roomId,
+                color,
+            });
+            // first slot available
+        } else if (
+            games[roomId].playerNumber[0] === 0 &&
+            games[roomId].playerNumber[1] !== 0
+        ) {
+            games[roomId].playerNumber[0] = playerId;
+            color = 'white';
+            socket.emit('joinSuccess', {
+                playerId,
+                roomId,
+                color,
+            });
+            // second slot available
+        } else if (
+            games[roomId].playerNumber[0] !== 0 &&
+            games[roomId].playerNumber[1] === 0
+        ) {
+            games[roomId].playerNumber[1] = playerId;
+            color = 'black';
+            socket.emit('joinSuccess', {
+                playerId,
+                roomId,
+                color,
+            });
+            // neither slot available
+        } else if (
+            games[roomId].playerNumber[0] !== 0 &&
+            games[roomId].playerNumber[1] !== 0
+        ) {
+            socket.emit('joinFailure', {
+                roomId,
+                playerId,
+            });
+        }
+    });
 });
 
 server.listen(port, () => {

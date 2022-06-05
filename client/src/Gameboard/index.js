@@ -12,6 +12,28 @@ function Gameboard() {
     const [playerTurn, setPlayerTurn] = useState('white');
     const [defeatedWhitePieces, setDefeatedWhitePieces] = useState([]);
     const [defeatedBlackPieces, setDefeatedBlackPieces] = useState([]);
+    const [joinedRoom, setJoinedRoom] = useState('');
+    const [playerColor, setPlayerColor] = useState('');
+
+    const roomSubmitHandler = (e) => {
+        e.preventDefault();
+        // ask the server if the room has space for player, and get your playerID
+        socket.emit(
+            'joinAttempt',
+            Number(document.getElementById('room-join-input').value)
+        );
+
+        // if successful, set the roomID and playerColor - otherwise show some error
+        socket.on('joinSuccess', function (data) {
+            console.log(data);
+            setPlayerColor(data.playerColor);
+            setJoinedRoom(data.roomId);
+        });
+
+        socket.on('joinFailure', function (data) {
+            window.alert(`Room ${data.roomId} is full!`);
+        });
+    };
 
     const boardSquareClasses = (item) => {
         let classesString = 'board-square ';
@@ -119,43 +141,63 @@ function Gameboard() {
     };
 
     return (
-        <div className="board-container">
-            <div className="player-1-container player-container">
-                <h2 className={playerTurn === 'white' ? 'active-player' : ''}>
-                    Player One{playerTurn === 'white' ? "'s Turn" : ''}
-                </h2>
-                <div className="defeated-pieces">
-                    {defeatedBlackPieces !== []
-                        ? defeatedBlackPieces.map((piece) => (
-                              <div className={piece}> </div>
-                          ))
-                        : ''}
+        <div className="app-container">
+            {joinedRoom === '' ? (
+                <div className="form-container">
+                    <form>
+                        <p>Enter which room to join (1-99)</p>
+                        <input type="number" id="room-join-input"></input>
+                        <button onClick={roomSubmitHandler}>Enter Room</button>
+                    </form>
                 </div>
-            </div>
-            <div className="chess-board">
-                {board.map((row) =>
-                    row.map((item) => (
-                        <button
-                            onClick={boardClickHandler}
-                            className={boardSquareClasses(item)}
-                            value={item}
-                            id={item}
-                        ></button>
-                    ))
-                )}
-            </div>
-            <div className="player-2-containter player-container">
-                <h2 className={playerTurn === 'black' ? 'active-player' : ''}>
-                    Player Two{playerTurn === 'black' ? "'s Turn" : ''}
-                </h2>
-                <div className="defeated-pieces">
-                    {defeatedWhitePieces !== []
-                        ? defeatedWhitePieces.map((piece) => (
-                              <div className={piece}> </div>
-                          ))
-                        : ''}
+            ) : (
+                <div className="board-container">
+                    <div className="player-1-container player-container">
+                        <h2
+                            className={
+                                playerTurn === 'white' ? 'active-player' : ''
+                            }
+                        >
+                            Player One{playerTurn === 'white' ? "'s Turn" : ''}
+                        </h2>
+                        <div className="defeated-pieces">
+                            {defeatedBlackPieces !== []
+                                ? defeatedBlackPieces.map((piece) => (
+                                      <div className={piece}> </div>
+                                  ))
+                                : ''}
+                        </div>
+                    </div>
+                    <div className="chess-board">
+                        {board.map((row) =>
+                            row.map((item) => (
+                                <button
+                                    onClick={boardClickHandler}
+                                    className={boardSquareClasses(item)}
+                                    value={item}
+                                    id={item}
+                                ></button>
+                            ))
+                        )}
+                    </div>
+                    <div className="player-2-containter player-container">
+                        <h2
+                            className={
+                                playerTurn === 'black' ? 'active-player' : ''
+                            }
+                        >
+                            Player Two{playerTurn === 'black' ? "'s Turn" : ''}
+                        </h2>
+                        <div className="defeated-pieces">
+                            {defeatedWhitePieces !== []
+                                ? defeatedWhitePieces.map((piece) => (
+                                      <div className={piece}> </div>
+                                  ))
+                                : ''}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 }
