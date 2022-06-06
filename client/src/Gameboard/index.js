@@ -16,6 +16,7 @@ function Gameboard() {
     const [playerColor, setPlayerColor] = useState('');
     const [myTurn, setMyTurn] = useState(false);
 
+    // Get data after an opponent moves
     socket.on('opponentMoved', (data) => {
         if (!myTurn) {
             setPiecesLocation(data.piecesLocationFromOpponent);
@@ -24,6 +25,19 @@ function Gameboard() {
             setPlayerTurn(data.playerTurnFromOpponent);
         }
         setMyTurn(true);
+    });
+
+    // If we find a winner, send and recieve that message, reset gameboard
+    const winHandler = (winnerColor) => {
+        socket.emit('winnerSend', winnerColor);
+    };
+
+    socket.on('winnerRecieve', (playerColor) => {
+        alert(`${playerColor} Wins! Resetting game...`);
+        setPiecesLocation(initialPiecesLocation);
+        setPlayerTurn('white');
+        setDefeatedBlackPieces([]);
+        setDefeatedWhitePieces([]);
     });
 
     const roomSubmitHandler = (e) => {
@@ -76,8 +90,20 @@ function Gameboard() {
             : [];
         let playerTurnToSend = '';
 
+        // Add here the check checker! Can't move into check
+        if (
+            firstClick !== '' &&
+            checkChecker(
+                firstClick,
+                e.target.value,
+                piecesLocation,
+                playerTurn
+            ) === 'cannot-move-into-check'
+        ) {
+            window.alert('Cannot move into check!');
+            return;
+        }
         // Valid second click
-        // Add here the check checker! Can't move into check...
         if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
 
@@ -154,6 +180,28 @@ function Gameboard() {
             }
 
             // Check for winner
+            if (
+                firstClick !== '' &&
+                checkChecker(
+                    firstClick,
+                    e.target.value,
+                    piecesLocation,
+                    'black'
+                ) === 'checkmate-white-wins'
+            ) {
+                winHandler('white');
+            }
+            if (
+                firstClick !== '' &&
+                checkChecker(
+                    firstClick,
+                    e.target.value,
+                    piecesLocation,
+                    'white'
+                ) === 'checkmate-black-wins'
+            ) {
+                winHandler('black');
+            }
             if (piecesLocation[e.target.value] === 'white-king') {
                 alert('Black Wins! Resetting game...');
                 setPiecesLocation(initialPiecesLocation);
@@ -174,7 +222,6 @@ function Gameboard() {
                 piecesLocation[e.target.value].includes(playerTurn) &&
                 playerColor === playerTurn
             ) {
-                checkChecker(e.target.value, e.target.value, piecesLocation);
                 document
                     .getElementById(e.target.value)
                     .classList.add('first-piece-selection');

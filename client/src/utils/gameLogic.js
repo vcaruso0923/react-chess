@@ -34,12 +34,20 @@ export const pieceMoveAttempt = (firstClick, secondClick, piecesLocation) => {
   );
 };
 
-export const checkChecker = (firstClick, secondClick, piecesLocation) => {
+export const checkChecker = (
+    firstClick,
+    secondClick,
+    piecesLocation,
+    kingColor
+) => {
     // Create array of squares that king could move to
-    // Do I need to change firstClick param? I guess it should be king location, no matter if it's clicked or not...
+    // Change firstClick param to be king location, no matter if it's clicked or not
+    firstClick = Object.keys(piecesLocation).find(
+        (key) => piecesLocation[key] === `${kingColor}-king`
+    );
     // Need to run this function twice for each king...
-    console.log(firstClick);
     const squaresAroundKing = [];
+    const friendliesAroundKing = [];
     // top
     if (pieceToMoveNumber(firstClick) + 1 < 9) {
         squaresAroundKing.push(
@@ -55,10 +63,6 @@ export const checkChecker = (firstClick, secondClick, piecesLocation) => {
         );
     }
     // right
-    // prettier-ignore
-    console.log((pieceToMoveCharacterCode(firstClick)) + 1);
-    // prettier-ignore
-    console.log((pieceToMoveCharacterCode(firstClick)) - 1);
     // prettier-ignore
     if (pieceToMoveCharacterCode(firstClick) + 1 < 73) {
         squaresAroundKing.push(
@@ -119,22 +123,139 @@ export const checkChecker = (firstClick, secondClick, piecesLocation) => {
                 .toLowerCase() + (pieceToMoveNumber(firstClick) - 1).toString()
         );
     }
-    console.log(squaresAroundKing);
+
+    // remove squares from the array if they are the same color as the king
+    for (let i = 0; i < squaresAroundKing.length; i++) {
+        if (piecesLocation[squaresAroundKing[i]].includes(kingColor)) {
+            squaresAroundKing.splice(i, 1);
+            friendliesAroundKing.push(squaresAroundKing[i]);
+        }
+    }
+
+    // Create arrays representing enemy piece location
+    const opponentColor = kingColor === 'white' ? 'black' : 'white';
+    let oppPawnArray = [];
+    let oppRookArray = [];
+    let oppBishopArray = [];
+    let oppHorseArray = [];
+    let oppQueenArray = [];
+    let oppKingArray = [];
+
+    for (const square in piecesLocation) {
+        if (piecesLocation[square].includes(kingColor + '-pawn')) {
+            oppPawnArray.push(square);
+        } else if (piecesLocation[square].includes(kingColor + '-rook')) {
+            oppRookArray.push(square);
+        } else if (piecesLocation[square].includes(kingColor + '-bishop')) {
+            oppBishopArray.push(square);
+        } else if (piecesLocation[square].includes(kingColor + '-horse')) {
+            oppHorseArray.push(square);
+        } else if (piecesLocation[square].includes(kingColor + '-queen')) {
+            oppQueenArray.push(square);
+        } else if (piecesLocation[square].includes(kingColor + '-rook')) {
+            oppKingArray.push(square);
+        }
+    }
+
     // Create array of squares that king could move to without moving into check
-    // Can I use the existing piece logic?
+    // Lets use the existing 'piecesLogic'
     // Takes three params - firstClick, secondClick, piecesLocation
+    // If the evals returns true, we know that piece can move to the square
+    // firstClick will be a square from the location arrays we just created
     // secondClick would be whatever piece location we are iterating on in the availableKingMovesArray
-    // for firstClick, we need to get locations of each game piece
-    // So each function would potentially have to be called twice, or for king/queen once, or for pawns 8 times
     const availableKingMoves = squaresAroundKing;
-    for (let i = 0; i < availableKingMoves.length; i++) {
-        console.log('hello');
+    console.log(squaresAroundKing);
+    if (squaresAroundKing.length > 0) {
+        for (let i = 0; i < squaresAroundKing.length; i++) {
+            for (let j = 0; j < oppPawnArray.length; j++) {
+                if (
+                    pawnMoveEval(
+                        oppPawnArray[j],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+            for (let k = 0; k < oppRookArray.length; k++) {
+                if (
+                    rookMoveEval(
+                        oppRookArray[k],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+            for (let l = 0; l < oppBishopArray.length; l++) {
+                if (
+                    bishopMoveEval(
+                        oppBishopArray[l],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+            for (let m = 0; m < oppHorseArray.length; m++) {
+                if (
+                    horseMoveEval(
+                        oppHorseArray[m],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+            for (let n = 0; n < oppQueenArray.length; n++) {
+                console.log(n);
+                if (
+                    queenMoveEval(
+                        oppQueenArray[n],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+            for (let o = 0; o < oppKingArray.length; o++) {
+                if (
+                    kingMoveEval(
+                        oppKingArray[o],
+                        squaresAroundKing[i],
+                        piecesLocation
+                    ) === true &&
+                    availableKingMoves.includes(squaresAroundKing[i])
+                ) {
+                    availableKingMoves.splice(availableKingMoves[i], 1);
+                }
+            }
+        }
     }
 
     // If the arrays are same length, checkmate and game is over
+    if (
+        friendliesAroundKing.length < 1 &&
+        squaresAroundKing === availableKingMoves
+    ) {
+        return `checkmate-${opponentColor}-wins`;
+    }
     // If second click is not included in 2nd array, return some message that you can't move into check
-
+    if (!availableKingMoves.includes(secondClick)) {
+        return `cannot-move-into-check`;
+    }
     // Otherwise allow the move to occur
+    return `move-okay`;
 };
 
 export const isKingAliveEval = (piecesLocation) => {

@@ -96,6 +96,12 @@ io.on('connection', function (socket) {
                 playerTurnFromOpponent,
             });
         });
+
+        socket.on('winnerSend', function (winnerColor) {
+            socket.broadcast.emit('winnerRecieve', {
+                winnerColor,
+            });
+        });
     });
 });
 
