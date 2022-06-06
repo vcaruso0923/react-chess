@@ -40,7 +40,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i) + (pieceToMoveNumber(firstClick) + i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i).toLowerCase() + (pieceToMoveNumber(firstClick) + i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -54,7 +54,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i) + (pieceToMoveNumber(firstClick) + i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i).toLowerCase() + (pieceToMoveNumber(firstClick) + i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -68,7 +68,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i) + (pieceToMoveNumber(firstClick) - i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick).toLowerCase() - i) + (pieceToMoveNumber(firstClick) - i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -82,7 +82,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i) + (pieceToMoveNumber(firstClick) - i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i).toLowerCase() + (pieceToMoveNumber(firstClick) - i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -96,7 +96,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
             // prettier-ignore
             if (destinationCharacterCode(secondClick) < pieceToMoveCharacterCode(firstClick)) {
                 for (let i = (destinationCharacterCode(secondClick) + 1) ; i < pieceToMoveCharacterCode(firstClick) ; i++) {
-                    let newCode = String.fromCharCode(i) + firstClick.slice(-1)
+                    let newCode = String.fromCharCode(i).toLowerCase() + firstClick.slice(-1)
                     if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                         return false
                     }
@@ -106,7 +106,7 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
             // prettier-ignore
             if (pieceToMoveCharacterCode(firstClick) < destinationCharacterCode(secondClick)) {
                 for (let i = (pieceToMoveCharacterCode(firstClick) + 1) ; i < destinationCharacterCode(secondClick) ; i++) {
-                    let newCode = String.fromCharCode(i) + firstClick.slice(-1)
+                    let newCode = String.fromCharCode(i).toLowerCase() + firstClick.slice(-1)
                     if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                         return false
                     }

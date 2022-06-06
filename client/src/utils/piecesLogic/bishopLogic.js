@@ -31,7 +31,7 @@ export const bishopMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i) + (pieceToMoveNumber(firstClick) + i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i).toLowerCase() + (pieceToMoveNumber(firstClick) + i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -45,7 +45,7 @@ export const bishopMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i) + (pieceToMoveNumber(firstClick) + i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i).toLowerCase() + (pieceToMoveNumber(firstClick) + i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -59,7 +59,7 @@ export const bishopMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i) + (pieceToMoveNumber(firstClick) - i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i).toLowerCase() + (pieceToMoveNumber(firstClick) - i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -73,7 +73,7 @@ export const bishopMoveEval = (firstClick, secondClick, piecesLocation) => {
         ) {
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
-                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i) + (pieceToMoveNumber(firstClick) - i).toString()
+                let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) + i).toLowerCase() + (pieceToMoveNumber(firstClick) - i).toString()
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }

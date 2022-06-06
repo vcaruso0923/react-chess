@@ -9,10 +9,12 @@ export const destinationNumber = (secondClick) => {
     return parseInt(secondClick.slice(-1));
 };
 export const pieceToMoveCharacterCode = (firstClick) => {
-    return firstClick.charCodeAt(0);
+    const temp = firstClick.charAt(0).toUpperCase();
+    return temp.charCodeAt(0);
 };
 export const destinationCharacterCode = (secondClick) => {
-    return secondClick.charCodeAt(0);
+    const temp = secondClick.charAt(0).toUpperCase();
+    return temp.charCodeAt(0);
 };
 export const pieceToMoveCharacterLetter = (firstClick) => {
     return firstClick.charAt(0);

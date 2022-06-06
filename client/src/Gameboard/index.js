@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
-import { pieceMoveAttempt } from '../utils/gameLogic';
+import { pieceMoveAttempt, checkChecker } from '../utils/gameLogic';
 import { io } from 'socket.io-client';
 
 const socket = io();
@@ -76,7 +76,8 @@ function Gameboard() {
             : [];
         let playerTurnToSend = '';
 
-        // Valid second click:
+        // Valid second click
+        // Add here the check checker! Can't move into check...
         if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
 
@@ -173,6 +174,7 @@ function Gameboard() {
                 piecesLocation[e.target.value].includes(playerTurn) &&
                 playerColor === playerTurn
             ) {
+                checkChecker(e.target.value, e.target.value, piecesLocation);
                 document
                     .getElementById(e.target.value)
                     .classList.add('first-piece-selection');

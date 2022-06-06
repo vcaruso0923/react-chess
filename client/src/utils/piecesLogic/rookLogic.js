@@ -23,7 +23,7 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
             // prettier-ignore
             if (destinationCharacterCode(secondClick) < pieceToMoveCharacterCode(firstClick)) {
             for (let i = (destinationCharacterCode(secondClick) + 1) ; i < pieceToMoveCharacterCode(firstClick) ; i++) {
-                let newCode = String.fromCharCode(i) + firstClick.slice(-1)
+                let newCode = String.fromCharCode(i).toLowerCase() + firstClick.slice(-1)
                 if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                     return false
                 }
@@ -33,7 +33,7 @@ export const rookMoveEval = (firstClick, secondClick, piecesLocation) => {
             // prettier-ignore
             if (pieceToMoveCharacterCode(firstClick) < destinationCharacterCode(secondClick)) {
           for (let i = (pieceToMoveCharacterCode(firstClick) + 1) ; i < destinationCharacterCode(secondClick) ; i++) {
-              let newCode = String.fromCharCode(i) + firstClick.slice(-1)
+              let newCode = String.fromCharCode(i).toLowerCase() + firstClick.slice(-1)
               if (piecesLocation[newCode].includes('white') || piecesLocation[newCode].includes('black')) {
                   return false
               }
