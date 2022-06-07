@@ -8,7 +8,6 @@ import {
 } from '../pieceLocationHelpers';
 
 export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
-    console.log(secondClick);
     if (piecesLocation[firstClick].includes('queen')) {
         // Can't move unless diagonal
         if (

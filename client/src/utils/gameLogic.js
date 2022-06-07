@@ -42,95 +42,105 @@ export const checkChecker = (
 ) => {
     // Create array of squares that king could move to
     // Change firstClick param to be king location, no matter if it's clicked or not
-    firstClick = Object.keys(piecesLocation).find(
+    const kingLocation = Object.keys(piecesLocation).find(
         (key) => piecesLocation[key] === `${kingColor}-king`
     );
+
     // Need to run this function twice for each king...
-    const squaresAroundKing = [];
+    const allSquaresAroundKing = [];
     const friendliesAroundKing = [];
     // top
-    if (pieceToMoveNumber(firstClick) + 1 < 9) {
-        squaresAroundKing.push(
-            pieceToMoveCharacterLetter(firstClick) +
-                (pieceToMoveNumber(firstClick) + 1).toString()
+    if (pieceToMoveNumber(kingLocation) + 1 < 9) {
+        allSquaresAroundKing.push(
+            pieceToMoveCharacterLetter(kingLocation) +
+                (pieceToMoveNumber(kingLocation) + 1).toString()
         );
     }
     // bottom
-    if (pieceToMoveNumber(firstClick) - 1 > 0) {
-        squaresAroundKing.push(
-            pieceToMoveCharacterLetter(firstClick) +
-                (pieceToMoveNumber(firstClick) - 1).toString()
+    if (pieceToMoveNumber(kingLocation) - 1 > 0) {
+        allSquaresAroundKing.push(
+            pieceToMoveCharacterLetter(kingLocation) +
+                (pieceToMoveNumber(kingLocation) - 1).toString()
         );
     }
     // right
     // prettier-ignore
-    if (pieceToMoveCharacterCode(firstClick) + 1 < 73) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) + 1)
-                .toLowerCase() + pieceToMoveNumber(firstClick).toString()
+    if (pieceToMoveCharacterCode(kingLocation) + 1 < 73) {
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) + 1)
+                .toLowerCase() + pieceToMoveNumber(kingLocation).toString()
         );
     }
     // left
     // prettier-ignore
-    if (pieceToMoveCharacterCode(firstClick) - 1 > 64) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) - 1)
-                .toLowerCase() + pieceToMoveNumber(firstClick).toString()
+    if (pieceToMoveCharacterCode(kingLocation) - 1 > 64) {
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) - 1)
+                .toLowerCase() + pieceToMoveNumber(kingLocation).toString()
         );
     }
 
     // topLeft
     // prettier-ignore
     if (
-        pieceToMoveCharacterCode(firstClick) - 1 > 64 &&
-        pieceToMoveNumber(firstClick) + 1 < 9
+        pieceToMoveCharacterCode(kingLocation) - 1 > 64 &&
+        pieceToMoveNumber(kingLocation) + 1 < 9
     ) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) - 1)
-                .toLowerCase() + (pieceToMoveNumber(firstClick) + 1).toString()
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) - 1)
+                .toLowerCase() + (pieceToMoveNumber(kingLocation) + 1).toString()
         );
     }
     // topRight
     // prettier-ignore
     if (
-        pieceToMoveCharacterCode(firstClick) + 1 < 73 &&
-        pieceToMoveNumber(firstClick) + 1 < 9
+        pieceToMoveCharacterCode(kingLocation) + 1 < 73 &&
+        pieceToMoveNumber(kingLocation) + 1 < 9
     ) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) + 1)
-                .toLowerCase() + (pieceToMoveNumber(firstClick) + 1).toString()
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) + 1)
+                .toLowerCase() + (pieceToMoveNumber(kingLocation) + 1).toString()
         );
     }
     // bottomRight
     // prettier-ignore
     if (
-        pieceToMoveCharacterCode(firstClick) + 1 < 73 &&
-        pieceToMoveNumber(firstClick) - 1 > 0
+        pieceToMoveCharacterCode(kingLocation) + 1 < 73 &&
+        pieceToMoveNumber(kingLocation) - 1 > 0
     ) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) + 1)
-                .toLowerCase() + (pieceToMoveNumber(firstClick) - 1).toString()
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) + 1)
+                .toLowerCase() + (pieceToMoveNumber(kingLocation) - 1).toString()
         );
     }
     // bottomLeft
     // prettier-ignore
     if (
-        pieceToMoveCharacterCode(firstClick) - 1 > 64 &&
-        pieceToMoveNumber(firstClick) - 1 > 0
+        pieceToMoveCharacterCode(kingLocation) - 1 > 64 &&
+        pieceToMoveNumber(kingLocation) - 1 > 0
     ) {
-        squaresAroundKing.push(
-            String.fromCharCode(pieceToMoveCharacterCode(firstClick) - 1)
-                .toLowerCase() + (pieceToMoveNumber(firstClick) - 1).toString()
+        allSquaresAroundKing.push(
+            String.fromCharCode(pieceToMoveCharacterCode(kingLocation) - 1)
+                .toLowerCase() + (pieceToMoveNumber(kingLocation) - 1).toString()
         );
     }
 
+    const squaresAroundKingNoFriendlies = [...allSquaresAroundKing];
+
+    console.log(allSquaresAroundKing);
+
     // remove squares from the array if they are the same color as the king
-    for (let i = 0; i < squaresAroundKing.length; i++) {
-        if (piecesLocation[squaresAroundKing[i]].includes(kingColor)) {
-            squaresAroundKing.splice(i, 1);
-            friendliesAroundKing.push(squaresAroundKing[i]);
+    for (let i = 0; i < allSquaresAroundKing.length; i++) {
+        if (piecesLocation[allSquaresAroundKing[i]].includes(kingColor)) {
+            const index = squaresAroundKingNoFriendlies.indexOf(
+                piecesLocation[allSquaresAroundKing[i]]
+            );
+            squaresAroundKingNoFriendlies.splice(index, 1);
+            friendliesAroundKing.push(allSquaresAroundKing[i]);
         }
     }
+
+    console.log(squaresAroundKingNoFriendlies);
 
     // Create arrays representing enemy piece location
     const opponentColor = kingColor === 'white' ? 'black' : 'white';
@@ -163,18 +173,20 @@ export const checkChecker = (
     // If the evals returns true, we know that piece can move to the square
     // firstClick will be a square from the location arrays we just created
     // secondClick would be whatever piece location we are iterating on in the availableKingMovesArray
-    const availableKingMoves = squaresAroundKing;
-    console.log(squaresAroundKing);
-    if (squaresAroundKing.length > 0) {
-        for (let i = 0; i < squaresAroundKing.length; i++) {
+    const availableKingMoves = squaresAroundKingNoFriendlies;
+
+    if (squaresAroundKingNoFriendlies.length > 0) {
+        for (let i = 0; i < squaresAroundKingNoFriendlies.length; i++) {
             for (let j = 0; j < oppPawnArray.length; j++) {
                 if (
                     pawnMoveEval(
                         oppPawnArray[j],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
@@ -183,10 +195,12 @@ export const checkChecker = (
                 if (
                     rookMoveEval(
                         oppRookArray[k],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
@@ -195,10 +209,12 @@ export const checkChecker = (
                 if (
                     bishopMoveEval(
                         oppBishopArray[l],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
@@ -207,23 +223,26 @@ export const checkChecker = (
                 if (
                     horseMoveEval(
                         oppHorseArray[m],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
             }
             for (let n = 0; n < oppQueenArray.length; n++) {
-                console.log(n);
                 if (
                     queenMoveEval(
                         oppQueenArray[n],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
@@ -232,10 +251,12 @@ export const checkChecker = (
                 if (
                     kingMoveEval(
                         oppKingArray[o],
-                        squaresAroundKing[i],
+                        squaresAroundKingNoFriendlies[i],
                         piecesLocation
                     ) === true &&
-                    availableKingMoves.includes(squaresAroundKing[i])
+                    availableKingMoves.includes(
+                        squaresAroundKingNoFriendlies[i]
+                    )
                 ) {
                     availableKingMoves.splice(availableKingMoves[i], 1);
                 }
@@ -246,12 +267,15 @@ export const checkChecker = (
     // If the arrays are same length, checkmate and game is over
     if (
         friendliesAroundKing.length < 1 &&
-        squaresAroundKing === availableKingMoves
+        squaresAroundKingNoFriendlies === availableKingMoves
     ) {
         return `checkmate-${opponentColor}-wins`;
     }
     // If second click is not included in 2nd array, return some message that you can't move into check
-    if (!availableKingMoves.includes(secondClick)) {
+    if (
+        !availableKingMoves.includes(secondClick) &&
+        firstClick === kingLocation
+    ) {
         return `cannot-move-into-check`;
     }
     // Otherwise allow the move to occur
