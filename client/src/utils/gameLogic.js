@@ -173,7 +173,7 @@ export const checkChecker = (
     // If the evals returns true, we know that piece can move to the square
     // firstClick will be a square from the location arrays we just created
     // secondClick would be whatever piece location we are iterating on in the availableKingMovesArray
-    const availableKingMoves = squaresAroundKingNoFriendlies;
+    const availableKingMoves = [...squaresAroundKingNoFriendlies];
 
     if (squaresAroundKingNoFriendlies.length > 0) {
         for (let i = 0; i < squaresAroundKingNoFriendlies.length; i++) {
@@ -273,8 +273,9 @@ export const checkChecker = (
     }
     // If second click is not included in 2nd array, return some message that you can't move into check
     if (
-        !availableKingMoves.includes(secondClick) &&
-        firstClick === kingLocation
+        availableKingMoves.includes(secondClick) &&
+        firstClick === kingLocation &&
+        secondClick !== kingLocation
     ) {
         return `cannot-move-into-check`;
     }
