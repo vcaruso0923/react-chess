@@ -88,6 +88,7 @@ function Gameboard() {
     }, [piecesLocation]);
 
     const boardClickHandler = (e) => {
+        roomIsFullNotif();
         e.preventDefault();
         // variables to send to socket (can't wait for state update)
         let piecesLocationToSend;

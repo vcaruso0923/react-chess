@@ -73,11 +73,11 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
-    background-color: white;
+    background-color: var(--one-color);
 }
 
 .player-container {
-    background-color: lightgrey;
+    background-color: var(--three-color);
     height: 50%;
     width: 25%;
     display: flex;
@@ -107,7 +107,7 @@ body {
 }
 
 .active-player {
-    color: green;
+    color: black;
     text-decoration: underline;
 }
 
@@ -120,7 +120,7 @@ body {
     justify-self: center;
 }
 .board-square {
-    border: 2px solid gray;
+    border: 2px solid #744d21;
     padding: 25px;
     margin: 0;
     text-align: center;
@@ -134,14 +134,14 @@ body {
 
 .black-board-square {
     color: white;
-    background-color: brown;
+    background-color: var(--four-color);
     height: 100%;
     width: 100%;
 }
 
 .white-board-square {
     color: black;
-    background-color: tan;
+    background-color: var(--two-color);
     height: 100%;
     width: 100%;
 }
