@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
 import { pieceMoveAttempt, checkChecker } from '../utils/gameLogic';
 import { io } from 'socket.io-client';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const socket = io();
 
@@ -15,6 +17,13 @@ function Gameboard() {
     const [joinedRoom, setJoinedRoom] = useState('');
     const [playerColor, setPlayerColor] = useState('');
     const [myTurn, setMyTurn] = useState(false);
+
+    const roomIsFullNotif = (roomId) => toast(`Room ${roomId} is full!`);
+    const cannotMoveIntoCheckNotif = () => toast("You can't move into check!");
+    const winnerNotif = (winnerColor) =>
+        toast(`${winnerColor} wins! Resetting game...`);
+    const checkmateWinnerNotif = (winnerColor) =>
+        toast(`Checkmate! ${winnerColor} wins! Resetting game...`);
 
     // Get data after an opponent moves
     socket.on('opponentMoved', (data) => {
@@ -33,7 +42,7 @@ function Gameboard() {
     };
 
     socket.on('winnerRecieve', (playerColor) => {
-        alert(`${playerColor} Wins! Resetting game...`);
+        checkmateWinnerNotif(playerColor);
         setPiecesLocation(initialPiecesLocation);
         setPlayerTurn('white');
         setDefeatedBlackPieces([]);
@@ -58,7 +67,7 @@ function Gameboard() {
         });
 
         socket.on('joinFailure', function (data) {
-            window.alert(`Room ${data.roomId} is full!`);
+            roomIsFullNotif(data.roomId);
         });
     };
 
@@ -100,7 +109,7 @@ function Gameboard() {
                 playerTurn
             ) === 'cannot-move-into-check'
         ) {
-            window.alert('Cannot move into check!');
+            cannotMoveIntoCheckNotif();
             return;
         }
         // Valid second click
@@ -203,13 +212,13 @@ function Gameboard() {
                 winHandler('black');
             }
             if (piecesLocation[e.target.value] === 'white-king') {
-                alert('Black Wins! Resetting game...');
+                winnerNotif('Black');
                 setPiecesLocation(initialPiecesLocation);
                 setPlayerTurn('white');
                 setDefeatedBlackPieces([]);
                 setDefeatedWhitePieces([]);
             } else if (piecesLocation[e.target.value] === 'black-king') {
-                alert('White Wins! Resetting game...');
+                winnerNotif('White');
                 setPiecesLocation(initialPiecesLocation);
                 setPlayerTurn('white');
                 setDefeatedBlackPieces([]);
@@ -263,6 +272,7 @@ function Gameboard() {
                     >
                         Enter Room
                     </button>
+                    <ToastContainer />
                 </form>
             ) : (
                 <div className="board-container">
@@ -310,6 +320,7 @@ function Gameboard() {
                                 : ''}
                         </div>
                     </div>
+                    <ToastContainer />
                 </div>
             )}
         </div>
