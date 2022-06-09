@@ -121,17 +121,17 @@ function Gameboard() {
             if (piecesLocation[e.target.value].includes('white')) {
                 defeatedWhitePiecesToSend.push(piecesLocation[e.target.value]);
                 defeatedBlackPiecesToSend = defeatedBlackPieces;
-                setDefeatedWhitePieces((defeatedWhitePieces) => [
-                    ...defeatedWhitePieces,
-                    piecesLocation[e.target.value],
-                ]);
+                // setDefeatedWhitePieces((defeatedWhitePieces) => [
+                //     ...defeatedWhitePieces,
+                //     piecesLocation[e.target.value],
+                // ]);
             } else if (piecesLocation[e.target.value].includes('black')) {
                 defeatedBlackPiecesToSend.push(piecesLocation[e.target.value]);
                 defeatedWhitePiecesToSend = defeatedWhitePieces;
-                setDefeatedBlackPieces((defeatedBlackPieces) => [
-                    ...defeatedBlackPieces,
-                    piecesLocation[e.target.value],
-                ]);
+                // setDefeatedBlackPieces((defeatedBlackPieces) => [
+                //     ...defeatedBlackPieces,
+                //     piecesLocation[e.target.value],
+                // ]);
             }
 
             // Empty pieces origin square and move it to destination
