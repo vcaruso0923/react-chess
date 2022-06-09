@@ -18,12 +18,13 @@ function Gameboard() {
     const [playerColor, setPlayerColor] = useState('');
     const [myTurn, setMyTurn] = useState(false);
 
-    const roomIsFullNotif = (roomId) => toast(`Room ${roomId} is full!`);
-    const cannotMoveIntoCheckNotif = () => toast("You can't move into check!");
+    const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
+    const cannotMoveIntoCheckNotif = () =>
+        toast.dark("You can't move into check!");
     const winnerNotif = (winnerColor) =>
-        toast(`${winnerColor} wins! Resetting game...`);
+        toast.dark(`${winnerColor} wins! Resetting game...`);
     const checkmateWinnerNotif = (winnerColor) =>
-        toast(`Checkmate! ${winnerColor} wins! Resetting game...`);
+        toast.dark(`Checkmate! ${winnerColor} wins! Resetting game...`);
 
     // Get data after an opponent moves
     socket.on('opponentMoved', (data) => {
