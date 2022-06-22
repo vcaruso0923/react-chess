@@ -19,10 +19,11 @@ body {
     width: 100%;
     margin: 0px;
     background-color: var(--one-color);
+    color: #59360f;
 }
 
 .form-container {
-    height: 50%;
+    height: 60%;
     width: 25%;
     background-color: var(--two-color);
     display: flex;
@@ -30,6 +31,14 @@ body {
     align-items: center;
     flex-wrap: wrap;
     border-radius: 6px;
+}
+
+.form-title {
+    text-decoration: underline;
+}
+
+.form-prompt {
+    margin: 0;
 }
 
 .form-input {
@@ -84,6 +93,8 @@ body {
     display: flex;
     flex-direction: column;
     align-content: center;
+    border: 2px solid #744d21;
+    border-radius: 6px;
 }
 
 .player-1-container {
@@ -108,7 +119,7 @@ body {
 }
 
 .active-player {
-    color: black;
+    color: #361f06;
     text-decoration: underline;
 }
 
@@ -150,11 +161,13 @@ body {
 .white-board-square:hover {
     border: 2px solid black;
     cursor: pointer;
+    background-color: rgb(121, 192, 121);
 }
 
 .black-board-square:hover {
     border: 2px solid black;
     cursor: pointer;
+    background-color: rgb(121, 192, 121);
 }
 
 .square-code {
@@ -252,5 +265,5 @@ body {
 }
 
 .first-piece-selection {
-    background-color: green;
+    background-color: rgb(121, 192, 121);
 }

@@ -249,7 +249,8 @@ function Gameboard() {
         <div className="board-container">
             {joinedRoom === '' ? (
                 <form className="form-container">
-                    <h2>Enter your name</h2>
+                    <h1 className="form-title">React Chess</h1>
+                    <h2 className="form-prompt">Enter your name:</h2>
                     <div className="break"></div>
                     <input
                         type="text"
@@ -258,7 +259,7 @@ function Gameboard() {
                         placeholder="Your Name..."
                     ></input>
                     <div className="break"></div>
-                    <h2>Enter a room to join</h2>
+                    <h2 className="form-prompt">Enter a room to join:</h2>
                     <div className="break"></div>
                     <input
                         type="number"
@@ -283,7 +284,8 @@ function Gameboard() {
                                 playerTurn === 'white' ? 'active-player' : ''
                             }
                         >
-                            Player One{playerTurn === 'white' ? "'s Turn" : ''}
+                            Player One{playerTurn === 'white' ? "'s Turn" : ''}{' '}
+                            - (White)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedBlackPieces !== [] && defeatedBlackPieces
@@ -311,7 +313,8 @@ function Gameboard() {
                                 playerTurn === 'black' ? 'active-player' : ''
                             }
                         >
-                            Player Two{playerTurn === 'black' ? "'s Turn" : ''}
+                            Player Two{playerTurn === 'black' ? "'s Turn" : ''}{' '}
+                            - (Black)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedWhitePieces !== [] && defeatedWhitePieces
