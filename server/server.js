@@ -19,7 +19,7 @@ let players;
 // create an array of 100 games and initialize them
 const games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = { players: 0, playerNumber: ['', ''] };
+    games[i] = { players: 0, playerNumber: ['', ''], playerName: ['', ''] };
 }
 const root = path.join(__dirname, '../', 'client', 'build');
 
@@ -35,39 +35,44 @@ io.on('connection', function (socket) {
 
     // when user attempts to join, see if there is space in the room
     // both slots available
-    socket.on('joinAttempt', function (roomId) {
+    socket.on('joinAttempt', function (roomId, playerName) {
         const initalRoomJoin = (playerId, roomId, color) => {
             socket.join(roomId);
             socket.emit('joinSuccess', {
                 playerId,
                 roomId,
                 color,
+                playerName,
             });
         };
         console.log(playerId + ' connected to room ' + roomId);
+        // both slots available
         if (
             games[roomId].playerNumber[0] === '' &&
             games[roomId].playerNumber[1] === ''
         ) {
             games[roomId].playerNumber[0] = playerId;
+            games[roomId].playerName[0] = playerName;
             color = 'white';
-            initalRoomJoin(playerId, roomId, color);
+            initalRoomJoin(playerId, roomId, color, playerName);
             // first slot available
         } else if (
             games[roomId].playerNumber[0] === '' &&
             games[roomId].playerNumber[1] !== ''
         ) {
             games[roomId].playerNumber[0] = playerId;
+            games[roomId].playerName[0] = playerName;
             color = 'white';
-            initalRoomJoin(playerId, roomId, color);
+            initalRoomJoin(playerId, roomId, color, playerName);
             // second slot available
         } else if (
             games[roomId].playerNumber[0] !== '' &&
             games[roomId].playerNumber[1] === ''
         ) {
             games[roomId].playerNumber[1] = playerId;
+            games[roomId].playerName[1] = playerName;
             color = 'black';
-            initalRoomJoin(playerId, roomId, color);
+            initalRoomJoin(playerId, roomId, color, playerName);
             // neither slot available
         } else if (
             games[roomId].playerNumber[0] !== '' &&
@@ -101,6 +106,11 @@ io.on('connection', function (socket) {
             socket.broadcast.emit('winnerRecieve', {
                 winnerColor,
             });
+        });
+
+        // Tell both players that one of them reset the game
+        socket.on('resetSend', function () {
+            socket.broadcast.emit('resetRecieve');
         });
 
         socket.on('forceDisconnect', function (playerId, roomId) {

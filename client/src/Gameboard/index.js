@@ -18,6 +18,7 @@ function Gameboard() {
     const [playerColor, setPlayerColor] = useState('');
     const [myTurn, setMyTurn] = useState(false);
     const [playerId, setPlayerId] = useState('');
+    const [playerName, setPlayerName] = useState('');
 
     const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
     const cannotMoveIntoCheckNotif = () =>
@@ -26,6 +27,7 @@ function Gameboard() {
         toast.dark(`${winnerColor} wins! Resetting game...`);
     const checkmateWinnerNotif = (winnerColor) =>
         toast.dark(`Checkmate! ${winnerColor} wins! Resetting game...`);
+    const resetNotif = () => toast.dark(`Resetting the game...`);
 
     // Get data after an opponent moves
     socket.on('opponentMoved', (data) => {
@@ -51,13 +53,45 @@ function Gameboard() {
         setDefeatedWhitePieces([]);
     });
 
+    const onReset = (playerName) => {
+        if (
+            window.confirm('Are you sure you want to reset the game?') === true
+        ) {
+            socket.emit('resetSend');
+            resetNotif();
+            setPiecesLocation(initialPiecesLocation);
+            setPlayerTurn('white');
+            setDefeatedBlackPieces([]);
+            setDefeatedWhitePieces([]);
+        }
+    };
+
+    socket.on('resetRecieve', () => {
+        resetNotif();
+        setPiecesLocation(initialPiecesLocation);
+        setPlayerTurn('white');
+        setDefeatedBlackPieces([]);
+        setDefeatedWhitePieces([]);
+    });
+
+    // socket.on('resetRecieve', (resetterName) => {
+    //     resetNotif(resetterName);
+    //     setPiecesLocation(initialPiecesLocation);
+    //     setPlayerTurn('white');
+    //     setDefeatedBlackPieces([]);
+    //     setDefeatedWhitePieces([]);
+    // });
+
     const roomSubmitHandler = (e) => {
         e.preventDefault();
         // ask the server if the room has space for player, and get your playerID
         socket.emit(
             'joinAttempt',
-            Number(document.getElementById('room-join-input').value)
+            Number(document.getElementById('room-join-input').value),
+            document.getElementById('name-input').value
         );
+
+        setPlayerName(document.getElementById('name-input').value);
 
         // if successful, set the roomID and playerColor - otherwise show some error
         socket.on('joinSuccess', function (data) {
@@ -295,8 +329,8 @@ function Gameboard() {
                                 playerTurn === 'white' ? 'active-player' : ''
                             }
                         >
-                            Player One{playerTurn === 'white' ? "'s Turn" : ''}{' '}
-                            - (White)
+                            {playerColor === 'white' ? playerName : 'Opponent'}{' '}
+                            {playerTurn === 'white' ? "'s Turn" : ''} - (White)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedBlackPieces !== [] && defeatedBlackPieces
@@ -324,8 +358,8 @@ function Gameboard() {
                                 playerTurn === 'black' ? 'active-player' : ''
                             }
                         >
-                            Player Two{playerTurn === 'black' ? "'s Turn" : ''}{' '}
-                            - (Black)
+                            {playerColor === 'black' ? playerName : 'Opponent'}
+                            {playerTurn === 'black' ? "'s Turn" : ''} - (Black)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedWhitePieces !== [] && defeatedWhitePieces
@@ -335,12 +369,20 @@ function Gameboard() {
                                 : ''}
                         </div>
                     </div>
-                    <button
-                        className="disconnect-button"
-                        onClick={onDisconnect}
-                    >
-                        Disconnect
-                    </button>
+                    <div className="board-controls">
+                        <button
+                            className="board-control-button"
+                            onClick={onDisconnect}
+                        >
+                            Disconnect
+                        </button>
+                        <button
+                            className="board-control-button"
+                            onClick={onReset}
+                        >
+                            Reset
+                        </button>
+                    </div>
                     <ToastContainer />
                 </div>
             )}
