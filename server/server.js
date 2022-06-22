@@ -106,6 +106,10 @@ io.on('connection', function (socket) {
         socket.on('forceDisconnect', function (playerId, roomId) {
             socket.disconnect();
         });
+
+        socket.on('disconnect', function () {
+            console.log(playerId + ' disconnected from room ' + roomId);
+        });
     });
 });
 
