@@ -51,7 +51,7 @@ body {
     box-sizing: border-box;
 }
 
-.form-submit-button {
+button {
     background-color: var(--three-color);
     border: none;
     padding: 15px 32px;
@@ -62,7 +62,7 @@ body {
     margin-bottom: 10px;
 }
 
-.form-submit-button:hover {
+button:hover {
     background-color: var(--four-color);
     cursor: pointer;
 }
@@ -84,6 +84,16 @@ body {
     height: 100%;
     width: 100%;
     background-color: var(--one-color);
+    flex-wrap: wrap;
+}
+
+.style-fixer-button {
+    margin: 0 50%;
+    background-color: var(--one-color);
+}
+
+.disconnect-button {
+    margin: 0 50%;
 }
 
 .player-container {

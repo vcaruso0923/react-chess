@@ -17,6 +17,7 @@ function Gameboard() {
     const [joinedRoom, setJoinedRoom] = useState('');
     const [playerColor, setPlayerColor] = useState('');
     const [myTurn, setMyTurn] = useState(false);
+    const [playerId, setPlayerId] = useState('');
 
     const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
     const cannotMoveIntoCheckNotif = () =>
@@ -62,6 +63,7 @@ function Gameboard() {
         socket.on('joinSuccess', function (data) {
             setPlayerColor(data.color);
             setJoinedRoom(data.roomId);
+            setPlayerId(data.playerId);
             if (data.color === 'white') {
                 setMyTurn(true);
             }
@@ -245,6 +247,14 @@ function Gameboard() {
         }
     };
 
+    // If player wants to disconnect, we have to remove them from the room - if the room is empty, we have to destroy it
+    const onDisconnect = () => {
+        if (window.confirm('Are you sure you want to disconnect?') === true) {
+            socket.emit('forceDisconnect', playerId, joinedRoom);
+            window.location.reload();
+        }
+    };
+
     return (
         <div className="board-container">
             {joinedRoom === '' ? (
@@ -278,6 +288,7 @@ function Gameboard() {
                 </form>
             ) : (
                 <div className="board-container">
+                    <button className="style-fixer-button"></button>
                     <div className="player-1-container player-container">
                         <h2
                             className={
@@ -324,6 +335,12 @@ function Gameboard() {
                                 : ''}
                         </div>
                     </div>
+                    <button
+                        className="disconnect-button"
+                        onClick={onDisconnect}
+                    >
+                        Disconnect
+                    </button>
                     <ToastContainer />
                 </div>
             )}

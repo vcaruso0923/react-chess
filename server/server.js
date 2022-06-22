@@ -33,6 +33,8 @@ io.on('connection', function (socket) {
     var color;
     var playerId = socket.id;
 
+    // when user attempts to join, see if there is space in the room
+    // both slots available
     socket.on('joinAttempt', function (roomId) {
         const initalRoomJoin = (playerId, roomId, color) => {
             socket.join(roomId);
@@ -43,9 +45,6 @@ io.on('connection', function (socket) {
             });
         };
         console.log(playerId + ' connected to room ' + roomId);
-
-        // when user attempts to join, see if there is space in the room
-        // both slots available
         if (
             games[roomId].playerNumber[0] === '' &&
             games[roomId].playerNumber[1] === ''
@@ -97,10 +96,15 @@ io.on('connection', function (socket) {
             });
         });
 
+        // Tell both players that a winner has been found
         socket.on('winnerSend', function (winnerColor) {
             socket.broadcast.emit('winnerRecieve', {
                 winnerColor,
             });
+        });
+
+        socket.on('forceDisconnect', function (playerId, roomId) {
+            socket.disconnect();
         });
     });
 });
