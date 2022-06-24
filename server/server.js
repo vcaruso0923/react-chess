@@ -16,11 +16,17 @@ const io = socket(server);
 // keep track of how many players in a game (0, 1, 2)
 let players;
 
-// create an array of 100 games and initialize them
-const games = Array(100);
-for (let i = 0; i < 100; i++) {
-    games[i] = { players: 0, playerNumber: ['', ''], playerName: ['', ''] };
-}
+// Data is stored in this object in this format:
+// roomId: { playerOneName: 'John Smith', playerTwoName: 'Bob Joe' },
+const roomsDataObj = {};
+// Hey future VInce. Create an array within the obj????!!?!?!?!?!?!!?!?!?!
+// roomsDataObj[roomId] = {
+//     'playerOneName': [playerOneName],
+//     'playerOneId': [playerOneId],
+//     'playerTwoName': [playerTwoName],
+//     'playerTwoId': [playerTwoId],
+// };
+
 const root = path.join(__dirname, '../', 'client', 'build');
 
 app.use(express.static(root));
@@ -34,7 +40,6 @@ io.on('connection', function (socket) {
     var playerId = socket.id;
 
     // when user attempts to join, see if there is space in the room
-    // both slots available
     socket.on('joinAttempt', function (roomId, playerName) {
         const initalRoomJoin = (playerId, roomId, color) => {
             socket.join(roomId);
@@ -46,38 +51,34 @@ io.on('connection', function (socket) {
             });
         };
         console.log(playerId + ' connected to room ' + roomId);
-        // both slots available
-        if (
-            games[roomId].playerNumber[0] === '' &&
-            games[roomId].playerNumber[1] === ''
-        ) {
-            games[roomId].playerNumber[0] = playerId;
-            games[roomId].playerName[0] = playerName;
+
+        // Both slots available
+        if (!roomsDataObj.hasOwnProperty(roomId)) {
+            roomsDataObj[roomId] = {
+                playerOneName: playerName,
+                playerOneId: playerId,
+                playerTwoName: '',
+                playerTwoId: '',
+            };
             color = 'white';
             initalRoomJoin(playerId, roomId, color, playerName);
-            // first slot available
-        } else if (
-            games[roomId].playerNumber[0] === '' &&
-            games[roomId].playerNumber[1] !== ''
-        ) {
-            games[roomId].playerNumber[0] = playerId;
-            games[roomId].playerName[0] = playerName;
+        }
+        // first slot available
+        else if (roomsDataObj[roomId]?.playerOneName === '') {
+            roomsDataObj[roomId].playerOneName = playerName;
+            roomsDataObj[roomId].playerOneId = playerId;
             color = 'white';
             initalRoomJoin(playerId, roomId, color, playerName);
-            // second slot available
-        } else if (
-            games[roomId].playerNumber[0] !== '' &&
-            games[roomId].playerNumber[1] === ''
-        ) {
-            games[roomId].playerNumber[1] = playerId;
-            games[roomId].playerName[1] = playerName;
+        }
+        // second slot available
+        else if (roomsDataObj[roomId]?.playerTwoName === '') {
+            roomsDataObj[roomId].playerTwoName = playerName;
+            roomsDataObj[roomId].playerTwoId = playerId;
             color = 'black';
             initalRoomJoin(playerId, roomId, color, playerName);
-            // neither slot available
-        } else if (
-            games[roomId].playerNumber[0] !== '' &&
-            games[roomId].playerNumber[1] !== ''
-        ) {
+        }
+        // No slots available
+        else {
             socket.emit('joinFailure', {
                 roomId,
                 playerId,
@@ -119,6 +120,21 @@ io.on('connection', function (socket) {
 
         socket.on('disconnect', function () {
             console.log(playerId + ' disconnected from room ' + roomId);
+            // Remove players or rooms as needed from roomsDataObj on disconnect
+            if (playerId === roomsDataObj[roomId].playerOneId) {
+                roomsDataObj[roomId].playerOneName = '';
+                roomsDataObj[roomId].playerOneId = '';
+            } else if (playerId === roomsDataObj[roomId].playerTwoId) {
+                roomsDataObj[roomId].playerTwoName = '';
+                roomsDataObj[roomId].playerTwoId = '';
+            }
+
+            if (
+                roomsDataObj[roomId].playerTwoId === '' &&
+                roomsDataObj[roomId].playerOneId === ''
+            ) {
+                delete roomsDataObj[roomId];
+            }
         });
     });
 });

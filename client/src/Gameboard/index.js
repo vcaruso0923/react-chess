@@ -87,7 +87,7 @@ function Gameboard() {
         // ask the server if the room has space for player, and get your playerID
         socket.emit(
             'joinAttempt',
-            Number(document.getElementById('room-join-input').value),
+            document.getElementById('room-join-input').value.toString(),
             document.getElementById('name-input').value
         );
 
@@ -300,16 +300,16 @@ function Gameboard() {
                         type="text"
                         id="name-input"
                         className="form-input"
-                        placeholder="Your Name..."
+                        placeholder="Your name..."
                     ></input>
                     <div className="break"></div>
                     <h2 className="form-prompt">Enter a room to join:</h2>
                     <div className="break"></div>
                     <input
-                        type="number"
+                        type="text"
                         id="room-join-input"
                         className="form-input"
-                        placeholder="0-99..."
+                        placeholder="Room to join..."
                     ></input>
                     <div className="break"></div>
                     <button
