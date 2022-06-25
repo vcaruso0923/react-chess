@@ -30,6 +30,7 @@ function Gameboard() {
     const checkmateWinnerNotif = (winnerColor) =>
         toast.dark(`Checkmate! ${winnerColor} wins! Resetting game...`);
     const resetNotif = () => toast.dark(`Resetting the game...`);
+    const invalidForm = () => toast.dark(`You must enter a name and room!`);
 
     // Get room data including player names
     socket.on('roomsObjectFromServer', (roomData) => {
@@ -92,10 +93,24 @@ function Gameboard() {
 
     const roomSubmitHandler = (e) => {
         e.preventDefault();
+        if (
+            document
+                .getElementById('room-join-input')
+                .value.toString()
+                .trim()
+                .toLowerCase() === '' ||
+            document.getElementById('name-input').value === ''
+        ) {
+            return invalidForm();
+        }
         // ask the server if the room has space for player, and get your playerID
         socket.emit(
             'joinAttempt',
-            document.getElementById('room-join-input').value.toString(),
+            document
+                .getElementById('room-join-input')
+                .value.toString()
+                .trim()
+                .toLowerCase(),
             document.getElementById('name-input').value
         );
 
@@ -109,6 +124,7 @@ function Gameboard() {
             if (data.color === 'white') {
                 setMyTurn(true);
             }
+            console.log(data.roomId);
         });
 
         socket.on('joinFailure', function (data) {
