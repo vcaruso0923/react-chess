@@ -50,6 +50,11 @@ io.on('connection', function (socket) {
                 playerName,
             });
         };
+        const broadcastRoomObject = (roomObj) => {
+            io.to(roomId).emit('roomsObjectFromServer', {
+                roomObj,
+            });
+        };
         console.log(playerId + ' connected to room ' + roomId);
 
         // Both slots available
@@ -62,6 +67,7 @@ io.on('connection', function (socket) {
             };
             color = 'white';
             initalRoomJoin(playerId, roomId, color, playerName);
+            broadcastRoomObject(roomsDataObj[roomId]);
         }
         // first slot available
         else if (roomsDataObj[roomId]?.playerOneName === '') {
@@ -69,6 +75,7 @@ io.on('connection', function (socket) {
             roomsDataObj[roomId].playerOneId = playerId;
             color = 'white';
             initalRoomJoin(playerId, roomId, color, playerName);
+            broadcastRoomObject(roomsDataObj[roomId]);
         }
         // second slot available
         else if (roomsDataObj[roomId]?.playerTwoName === '') {
@@ -76,6 +83,7 @@ io.on('connection', function (socket) {
             roomsDataObj[roomId].playerTwoId = playerId;
             color = 'black';
             initalRoomJoin(playerId, roomId, color, playerName);
+            broadcastRoomObject(roomsDataObj[roomId]);
         }
         // No slots available
         else {
@@ -124,9 +132,11 @@ io.on('connection', function (socket) {
             if (playerId === roomsDataObj[roomId].playerOneId) {
                 roomsDataObj[roomId].playerOneName = '';
                 roomsDataObj[roomId].playerOneId = '';
+                broadcastRoomObject(roomsDataObj[roomId]);
             } else if (playerId === roomsDataObj[roomId].playerTwoId) {
                 roomsDataObj[roomId].playerTwoName = '';
                 roomsDataObj[roomId].playerTwoId = '';
+                broadcastRoomObject(roomsDataObj[roomId]);
             }
 
             if (

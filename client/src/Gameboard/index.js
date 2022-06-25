@@ -19,6 +19,8 @@ function Gameboard() {
     const [myTurn, setMyTurn] = useState(false);
     const [playerId, setPlayerId] = useState('');
     const [playerName, setPlayerName] = useState('');
+    const [whitePlayerName, setWhitePlayerName] = useState('');
+    const [blackPlayerName, setBlackPlayerName] = useState('');
 
     const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
     const cannotMoveIntoCheckNotif = () =>
@@ -28,6 +30,12 @@ function Gameboard() {
     const checkmateWinnerNotif = (winnerColor) =>
         toast.dark(`Checkmate! ${winnerColor} wins! Resetting game...`);
     const resetNotif = () => toast.dark(`Resetting the game...`);
+
+    // Get room data including player names
+    socket.on('roomsObjectFromServer', (roomData) => {
+        setWhitePlayerName(roomData.roomObj.playerOneName);
+        setBlackPlayerName(roomData.roomObj.playerTwoName);
+    });
 
     // Get data after an opponent moves
     socket.on('opponentMoved', (data) => {
@@ -329,8 +337,13 @@ function Gameboard() {
                                 playerTurn === 'white' ? 'active-player' : ''
                             }
                         >
-                            {playerColor === 'white' ? playerName : 'Opponent'}{' '}
-                            {playerTurn === 'white' ? "'s Turn" : ''} - (White)
+                            {whitePlayerName === ''
+                                ? 'Waiting for opponent...'
+                                : whitePlayerName}
+                            {playerTurn === 'white' && whitePlayerName !== ''
+                                ? "'s Turn"
+                                : ''}{' '}
+                            - (White)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedBlackPieces !== [] && defeatedBlackPieces
@@ -358,8 +371,13 @@ function Gameboard() {
                                 playerTurn === 'black' ? 'active-player' : ''
                             }
                         >
-                            {playerColor === 'black' ? playerName : 'Opponent'}
-                            {playerTurn === 'black' ? "'s Turn" : ''} - (Black)
+                            {blackPlayerName === ''
+                                ? 'Waiting for opponent...'
+                                : blackPlayerName}
+                            {playerTurn === 'white' && blackPlayerName !== ''
+                                ? "'s Turn"
+                                : ''}{' '}
+                            - (Black)
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedWhitePieces !== [] && defeatedWhitePieces
