@@ -101,12 +101,14 @@ io.on('connection', function (socket) {
             let defeatedWhitePiecesFromOpponent =
                 data.defeatedWhitePiecesToSend;
             let playerTurnFromOpponent = data.playerTurnToSend;
+            let movesHistoryFromOpponent = data.movesHistoryToSend;
 
             socket.broadcast.emit('opponentMoved', {
                 piecesLocationFromOpponent,
                 defeatedBlackPiecesFromOpponent,
                 defeatedWhitePiecesFromOpponent,
                 playerTurnFromOpponent,
+                movesHistoryFromOpponent,
             });
         });
 

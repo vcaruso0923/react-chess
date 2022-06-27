@@ -87,9 +87,33 @@ button:hover {
     flex-wrap: wrap;
 }
 
-.style-fixer-button {
-    margin: 0 50%;
-    background-color: var(--one-color);
+.move-list {
+    flex-basis: 100%;
+    height: 45px;
+    background-color: var(--three-color);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    list-style: none;
+    border-top: 2px solid #744d21;
+    border-bottom: 2px solid #744d21;
+}
+
+.move-list-items {
+    margin: 0 5px;
+    border-radius: 50%;
+    padding: 8px;
+}
+
+.black-move {
+    background-color: black;
+    color: white;
+}
+
+.white-move {
+    background-color: white;
+    color: black;
 }
 
 .board-controls {

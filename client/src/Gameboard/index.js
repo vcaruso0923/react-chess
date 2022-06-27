@@ -21,6 +21,7 @@ function Gameboard() {
     const [playerName, setPlayerName] = useState('');
     const [whitePlayerName, setWhitePlayerName] = useState('');
     const [blackPlayerName, setBlackPlayerName] = useState('');
+    const [movesHistory, setMovesHistory] = useState([]);
 
     const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
     const cannotMoveIntoCheckNotif = () =>
@@ -31,9 +32,26 @@ function Gameboard() {
         toast.dark(`Checkmate! ${winnerColor} wins! Resetting game...`);
     const resetNotif = () => toast.dark(`Resetting the game...`);
     const invalidForm = () => toast.dark(`You must enter a name and room!`);
+    const opponentDisconnectNotif = () =>
+        toast.dark(`Opponent disconnected! Resetting game...`);
+
+    const resetHandler = () => {
+        setPiecesLocation(initialPiecesLocation);
+        setPlayerTurn('white');
+        setDefeatedBlackPieces([]);
+        setDefeatedWhitePieces([]);
+        setMovesHistory([]);
+    };
 
     // Get room data including player names
     socket.on('roomsObjectFromServer', (roomData) => {
+        if (
+            (whitePlayerName && roomData.roomObj.playerOneName === '') ||
+            (blackPlayerName && roomData.roomObj.playerTwoName === '')
+        ) {
+            opponentDisconnectNotif();
+            resetHandler();
+        }
         setWhitePlayerName(roomData.roomObj.playerOneName);
         setBlackPlayerName(roomData.roomObj.playerTwoName);
     });
@@ -45,6 +63,7 @@ function Gameboard() {
             setDefeatedBlackPieces(data.defeatedBlackPiecesFromOpponent);
             setDefeatedWhitePieces(data.defeatedWhitePiecesFromOpponent);
             setPlayerTurn(data.playerTurnFromOpponent);
+            setMovesHistory(data.movesHistoryFromOpponent);
         }
         setMyTurn(true);
     });
@@ -56,10 +75,7 @@ function Gameboard() {
 
     socket.on('winnerRecieve', (playerColor) => {
         checkmateWinnerNotif(playerColor);
-        setPiecesLocation(initialPiecesLocation);
-        setPlayerTurn('white');
-        setDefeatedBlackPieces([]);
-        setDefeatedWhitePieces([]);
+        resetHandler();
     });
 
     const onReset = (playerName) => {
@@ -68,28 +84,14 @@ function Gameboard() {
         ) {
             socket.emit('resetSend');
             resetNotif();
-            setPiecesLocation(initialPiecesLocation);
-            setPlayerTurn('white');
-            setDefeatedBlackPieces([]);
-            setDefeatedWhitePieces([]);
+            resetHandler();
         }
     };
 
     socket.on('resetRecieve', () => {
         resetNotif();
-        setPiecesLocation(initialPiecesLocation);
-        setPlayerTurn('white');
-        setDefeatedBlackPieces([]);
-        setDefeatedWhitePieces([]);
+        resetHandler();
     });
-
-    // socket.on('resetRecieve', (resetterName) => {
-    //     resetNotif(resetterName);
-    //     setPiecesLocation(initialPiecesLocation);
-    //     setPlayerTurn('white');
-    //     setDefeatedBlackPieces([]);
-    //     setDefeatedWhitePieces([]);
-    // });
 
     const roomSubmitHandler = (e) => {
         e.preventDefault();
@@ -177,6 +179,26 @@ function Gameboard() {
         if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
 
+            // Add move to move history
+            const newMove =
+                piecesLocation[firstClick]
+                    .replace('black-', '')
+                    .replace('white-', '')
+                    .charAt(0)
+                    .toUpperCase() === 'P'
+                    ? e.target.value
+                    : piecesLocation[firstClick]
+                          .replace('black-', '')
+                          .replace('white-', '')
+                          .charAt(0)
+                          .toUpperCase();
+            const newMoveColor = piecesLocation[firstClick].includes('white')
+                ? 'white'
+                : 'black';
+            const newMoveObject = { move: newMove, color: newMoveColor };
+            const movesHistoryToSend = [newMoveObject, ...movesHistory];
+            setMovesHistory([newMoveObject, ...movesHistory]);
+
             // Add defeated pieces to appropriate defeated piece arrays
             if (piecesLocation[e.target.value].includes('white')) {
                 defeatedWhitePiecesToSend.push(piecesLocation[e.target.value]);
@@ -245,6 +267,7 @@ function Gameboard() {
                     defeatedBlackPiecesToSend,
                     defeatedWhitePiecesToSend,
                     playerTurnToSend,
+                    movesHistoryToSend,
                 });
                 setMyTurn(false);
             }
@@ -274,16 +297,10 @@ function Gameboard() {
             }
             if (piecesLocation[e.target.value] === 'white-king') {
                 winnerNotif('Black');
-                setPiecesLocation(initialPiecesLocation);
-                setPlayerTurn('white');
-                setDefeatedBlackPieces([]);
-                setDefeatedWhitePieces([]);
+                resetHandler();
             } else if (piecesLocation[e.target.value] === 'black-king') {
                 winnerNotif('White');
-                setPiecesLocation(initialPiecesLocation);
-                setPlayerTurn('white');
-                setDefeatedBlackPieces([]);
-                setDefeatedWhitePieces([]);
+                resetHandler();
             }
             //add socket.emit for game win
         } else {
@@ -346,7 +363,22 @@ function Gameboard() {
                 </form>
             ) : (
                 <div className="board-container">
-                    <button className="style-fixer-button"></button>
+                    <ul className="move-list">
+                        {movesHistory !== []
+                            ? movesHistory.map((move) => (
+                                  <li
+                                      className={
+                                          move.color === 'white'
+                                              ? 'white-move move-list-items'
+                                              : 'black-move move-list-items'
+                                      }
+                                      key={move.move}
+                                  >
+                                      {move.move}
+                                  </li>
+                              ))
+                            : ''}
+                    </ul>
                     <div className="player-1-container player-container">
                         <h2
                             className={
@@ -357,9 +389,8 @@ function Gameboard() {
                                 ? 'Waiting for opponent...'
                                 : whitePlayerName}
                             {playerTurn === 'white' && whitePlayerName !== ''
-                                ? "'s Turn"
-                                : ''}{' '}
-                            - (White)
+                                ? "'s Turn - (White)"
+                                : ' - (White)'}
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedBlackPieces !== [] && defeatedBlackPieces
@@ -377,6 +408,10 @@ function Gameboard() {
                                     className={boardSquareClasses(item)}
                                     value={item}
                                     id={item}
+                                    disabled={
+                                        whitePlayerName === '' ||
+                                        blackPlayerName === ''
+                                    }
                                 ></button>
                             ))
                         )}
@@ -390,10 +425,9 @@ function Gameboard() {
                             {blackPlayerName === ''
                                 ? 'Waiting for opponent...'
                                 : blackPlayerName}
-                            {playerTurn === 'white' && blackPlayerName !== ''
-                                ? "'s Turn"
-                                : ''}{' '}
-                            - (Black)
+                            {playerTurn === 'black' && blackPlayerName !== ''
+                                ? "'s Turn - (Black)"
+                                : ' - (Black)'}
                         </h2>
                         <div className="defeated-pieces">
                             {defeatedWhitePieces !== [] && defeatedWhitePieces
