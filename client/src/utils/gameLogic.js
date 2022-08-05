@@ -16,8 +16,6 @@ import {
     destinationCharacterLetter,
 } from './pieceLocationHelpers';
 
-export { castleMoveEval } from './specialMovesLogic';
-
 export const pieceMoveAttempt = (firstClick, secondClick, piecesLocation) => {
     // prettier-ignore
     return (

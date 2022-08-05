@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { board, whiteSquares, initialPiecesLocation } from '../utils/enums';
-import {
-    pieceMoveAttempt,
-    checkChecker,
-    castleMoveEval,
-} from '../utils/gameLogic';
+import { pieceMoveAttempt, checkChecker } from '../utils/gameLogic';
 import { io } from 'socket.io-client';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -26,9 +22,6 @@ function Gameboard() {
     const [whitePlayerName, setWhitePlayerName] = useState('');
     const [blackPlayerName, setBlackPlayerName] = useState('');
     const [movesHistory, setMovesHistory] = useState([]);
-    const [kingMoved, setKingMoved] = useState(false);
-    const [queenSideRookMoved, setQueenSideRookMoved] = useState(false);
-    const [kingSideRookMoved, setKingSideRookMoved] = useState(false);
 
     const roomIsFullNotif = (roomId) => toast.dark(`Room ${roomId} is full!`);
     const cannotMoveIntoCheckNotif = () =>
@@ -168,9 +161,8 @@ function Gameboard() {
             ? defeatedWhitePieces
             : [];
         let playerTurnToSend = '';
-        let movesHistoryToSend;
 
-        // Can't move into check
+        // Add here the check checker! Can't move into check
         if (
             firstClick !== '' &&
             checkChecker(
@@ -183,18 +175,8 @@ function Gameboard() {
             cannotMoveIntoCheckNotif();
             return;
         }
-        // Valid second click / valid move
-        if (
-            pieceMoveAttempt(firstClick, e.target.value, piecesLocation) ||
-            castleMoveEval(
-                firstClick,
-                secondClick,
-                piecesLocation,
-                kingMoved,
-                kingSideRookMoved,
-                queenSideRookMoved
-            )
-        ) {
+        // Valid second click
+        if (pieceMoveAttempt(firstClick, e.target.value, piecesLocation)) {
             setSecondClick(e.target.value);
 
             // Add move to move history
@@ -214,16 +196,24 @@ function Gameboard() {
                 ? 'white'
                 : 'black';
             const newMoveObject = { move: newMove, color: newMoveColor };
-            movesHistoryToSend = [newMoveObject, ...movesHistory];
+            const movesHistoryToSend = [newMoveObject, ...movesHistory];
             setMovesHistory([newMoveObject, ...movesHistory]);
 
             // Add defeated pieces to appropriate defeated piece arrays
             if (piecesLocation[e.target.value].includes('white')) {
                 defeatedWhitePiecesToSend.push(piecesLocation[e.target.value]);
                 defeatedBlackPiecesToSend = defeatedBlackPieces;
+                // setDefeatedWhitePieces((defeatedWhitePieces) => [
+                //     ...defeatedWhitePieces,
+                //     piecesLocation[e.target.value],
+                // ]);
             } else if (piecesLocation[e.target.value].includes('black')) {
                 defeatedBlackPiecesToSend.push(piecesLocation[e.target.value]);
                 defeatedWhitePiecesToSend = defeatedWhitePieces;
+                // setDefeatedBlackPieces((defeatedBlackPieces) => [
+                //     ...defeatedBlackPieces,
+                //     piecesLocation[e.target.value],
+                // ]);
             }
 
             // Empty pieces origin square and move it to destination
