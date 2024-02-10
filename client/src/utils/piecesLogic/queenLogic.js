@@ -66,7 +66,6 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
             pieceToMoveCharacterCode(firstClick) >
                 destinationCharacterCode(secondClick)
         ) {
-            console.log('down left');
             // prettier-ignore
             for (let i = 1 ; i < Math.abs((pieceToMoveNumber(firstClick) - destinationNumber(secondClick))) ; i++) {
                 let newCode = String.fromCharCode(pieceToMoveCharacterCode(firstClick) - i).toLowerCase() + (pieceToMoveNumber(firstClick) - i).toString()
@@ -120,7 +119,6 @@ export const queenMoveEval = (firstClick, secondClick, piecesLocation) => {
             pieceToMoveCharacterCode(firstClick) ===
             destinationCharacterCode(secondClick)
         ) {
-            console.log('vert');
             // moving down
             // prettier-ignore
             if (destinationNumber(secondClick) < pieceToMoveNumber(firstClick)) {

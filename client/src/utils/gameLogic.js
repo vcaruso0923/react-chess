@@ -127,8 +127,6 @@ export const checkChecker = (
 
     const squaresAroundKingNoFriendlies = [...allSquaresAroundKing];
 
-    console.log(allSquaresAroundKing);
-
     // remove squares from the array if they are the same color as the king
     for (let i = 0; i < allSquaresAroundKing.length; i++) {
         if (piecesLocation[allSquaresAroundKing[i]].includes(kingColor)) {
@@ -139,8 +137,6 @@ export const checkChecker = (
             friendliesAroundKing.push(allSquaresAroundKing[i]);
         }
     }
-
-    console.log(squaresAroundKingNoFriendlies);
 
     // Create arrays representing enemy piece location
     const opponentColor = kingColor === 'white' ? 'black' : 'white';
